@@ -1,0 +1,7 @@
+interface:
+  display_name: "Investment Strategy Check"
+  short_description: "Check proposed changes against your investment rules"
+  default_prompt: "Use $investment-strategy-check to assess my proposed change against my own investment strategy and explain the relevant rules."
+
+policy:
+  allow_implicit_invocation: true

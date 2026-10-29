@@ -1,0 +1,44 @@
+{
+	"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+	"name": "investboard",
+	"version": "2.1.0",
+	"description": "Investment strategy, decisions, theses and portfolio intelligence with your connected Investboard account or supplied reports.",
+	"author": {
+		"name": "Investboard",
+		"url": "https://investboard.com"
+	},
+	"homepage": "https://investboard.com/product/ai-toolkit",
+	"license": "Proprietary",
+	"keywords": [
+		"investing",
+		"investment strategy",
+		"investment thesis",
+		"portfolio intelligence"
+	],
+	"extensions": {
+		"com.openai": {
+			"interface": {
+				"displayName": "Investboard",
+				"shortDescription": "Portfolio insights and rules",
+				"longDescription": "Use Investment Strategy Check to assess a proposed change against your own rules, Investment Decision-Making to work through choices and revisit previous decisions, Investment Thesis to clarify and review your reasoning, and Portfolio Intelligence to understand exposures, overlap, diversification and historical correlations from available analytics or supplied reports. Connect Investboard to read your mandate and permitted records, save hypothetical checks and record outcomes you state. With portfolio:read, Premium and enabled portfolio sharing, the three portfolio tools read imported holdings and values, fund exposures and historical analytics. They do not return brokerage credentials or account numbers. The tools do not edit theses or journal reviews, change the mandate, or submit orders.",
+				"developerName": "Investboard",
+				"category": "Finance",
+				"capabilities": [
+					"Read",
+					"Write"
+				],
+				"websiteURL": "https://investboard.com",
+				"privacyPolicyURL": "https://investboard.com/privacy",
+				"termsOfServiceURL": "https://investboard.com/terms",
+				"defaultPrompt": [
+					"Check a proposed change against my investment strategy.",
+					"Help me clarify my investment thesis and work through the decision.",
+					"Explain the exposures, overlap and diversification in my portfolio report."
+				],
+				"logo": "./assets/icon.png",
+				"composerIcon": "./assets/icon.png",
+				"supportURL": "https://investboard.com/help"
+			}
+		}
+	}
+}

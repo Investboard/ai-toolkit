@@ -1,0 +1,7 @@
+interface:
+  display_name: "Portfolio Intelligence"
+  short_description: "Understand exposures, overlap and diversification"
+  default_prompt: "Use $portfolio-intelligence to explain my portfolio's underlying exposures, overlap, diversification and historical correlations from the data available."
+
+policy:
+  allow_implicit_invocation: true

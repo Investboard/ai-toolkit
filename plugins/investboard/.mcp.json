@@ -1,0 +1,8 @@
+{
+	"mcpServers": {
+		"investboard": {
+			"type": "http",
+			"url": "https://app.investboard.com/mcp"
+		}
+	}
+}

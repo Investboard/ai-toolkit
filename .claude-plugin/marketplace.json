@@ -1,0 +1,12 @@
+{
+	"name": "investboard",
+	"owner": {
+		"name": "Investboard"
+	},
+	"plugins": [
+		{
+			"name": "investboard",
+			"source": "./plugins/investboard"
+		}
+	]
+}

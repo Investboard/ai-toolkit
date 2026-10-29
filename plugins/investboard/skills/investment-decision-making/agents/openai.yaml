@@ -1,0 +1,7 @@
+interface:
+  display_name: "Investment Decision-Making"
+  short_description: "Work through choices and learn from past decisions"
+  default_prompt: "Use $investment-decision-making to work through my investment decision using my objectives, rules and past experience."
+
+policy:
+  allow_implicit_invocation: true

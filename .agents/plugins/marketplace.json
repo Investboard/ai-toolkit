@@ -1,0 +1,19 @@
+{
+	"name": "investboard",
+	"interface": {
+		"displayName": "Investboard"
+	},
+	"plugins": [
+		{
+			"name": "investboard",
+			"source": {
+				"source": "local",
+				"path": "./plugins/investboard"
+			},
+			"policy": {
+				"installation": "AVAILABLE",
+				"authentication": "ON_INSTALL"
+			}
+		}
+	]
+}

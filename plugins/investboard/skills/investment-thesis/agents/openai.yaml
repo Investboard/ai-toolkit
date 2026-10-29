@@ -1,0 +1,7 @@
+interface:
+  display_name: "Investment Thesis"
+  short_description: "Clarify your investment case and what would change it"
+  default_prompt: "Use $investment-thesis to clarify or revisit my investment reasoning, assumptions and the evidence that would change my mind."
+
+policy:
+  allow_implicit_invocation: true

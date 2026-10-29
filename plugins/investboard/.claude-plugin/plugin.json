@@ -1,0 +1,18 @@
+{
+	"name": "investboard",
+	"displayName": "Investboard",
+	"version": "2.1.0",
+	"description": "Investment strategy, decisions, theses and portfolio intelligence with your connected Investboard account or supplied reports.",
+	"author": {
+		"name": "Investboard",
+		"url": "https://investboard.com"
+	},
+	"homepage": "https://investboard.com/help",
+	"license": "Proprietary",
+	"keywords": [
+		"investing",
+		"investment strategy",
+		"investment thesis",
+		"portfolio intelligence"
+	]
+}
