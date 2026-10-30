@@ -1,8 +1,8 @@
 {
 	"$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
 	"name": "investboard",
-	"version": "2.1.0",
-	"description": "Investment strategy, decisions, theses and portfolio intelligence with your connected Investboard account or supplied reports.",
+	"version": "2.1.1",
+	"description": "Second brain for investing. Bring your portfolio, strategy and investment reasoning into your AI assistant.",
 	"author": {
 		"name": "Investboard",
 		"url": "https://investboard.com"
@@ -19,8 +19,8 @@
 		"com.openai": {
 			"interface": {
 				"displayName": "Investboard",
-				"shortDescription": "Portfolio insights and rules",
-				"longDescription": "Use Investment Strategy Check to assess a proposed change against your own rules, Investment Decision-Making to work through choices and revisit previous decisions, Investment Thesis to clarify and review your reasoning, and Portfolio Intelligence to understand exposures, overlap, diversification and historical correlations from available analytics or supplied reports. Connect Investboard to read your mandate and permitted records, save hypothetical checks and record outcomes you state. With portfolio:read, Premium and enabled portfolio sharing, the three portfolio tools read imported holdings and values, fund exposures and historical analytics. They do not return brokerage credentials or account numbers. The tools do not edit theses or journal reviews, change the mandate, or submit orders.",
+				"shortDescription": "Second brain for investing",
+				"longDescription": "Investboard brings your portfolio, personal strategy and investment decisions together. Understand what you own, set out how you want to invest, and keep the reasons behind your choices. Bring that context into your AI assistant so each review can build on what you have already recorded.\n\nWhat Investboard can do:\n\nInvestment Strategy Check: Assess proposed changes against your goals, allocation rules and constraints.\n\nInvestment Decision-Making: Work through alternatives, trade-offs and uncertainty, and reflect on previous decisions.\n\nInvestment Thesis: Develop and review your investment case, challenge its assumptions and define what would change your mind.\n\nPortfolio Intelligence: Explore your holdings, look through equity funds, identify overlap and concentration, and understand diversification and historical correlations.\n\nStart with your investing.md policy, research notes or reports, or connect your Investboard account to read your mandate, holdings, available analytics, saved checks, theses and journal entries.\n\nTry prompts like:\n\n- Help me understand my portfolio's underlying holdings, overlap and diversification.\n- Check a change I am considering against my investment strategy.\n- Help me develop an investment thesis and work through the decision.\n- Explain what my portfolio's historical correlations can and cannot tell me.\n- Review my recent investment decisions and the journal reviews that are due.\n- I decided to defer the change we checked. Record that decision.\n\nRequirements: Connected features require an Investboard account and the relevant access, permissions and sharing settings. Skills can also work with files you supply. Account tools save requested hypothetical checks and outcomes you ask to record.\n\nOpen Investboard to update your strategy, save a thesis or complete a journal review. You make every investment decision. Investboard does not place orders.",
 				"developerName": "Investboard",
 				"category": "Finance",
 				"capabilities": [
@@ -31,9 +31,9 @@
 				"privacyPolicyURL": "https://investboard.com/privacy",
 				"termsOfServiceURL": "https://investboard.com/terms",
 				"defaultPrompt": [
-					"Check a proposed change against my investment strategy.",
-					"Help me clarify my investment thesis and work through the decision.",
-					"Explain the exposures, overlap and diversification in my portfolio report."
+					"Help me understand my portfolio's underlying holdings, overlap and diversification.",
+					"Check a change I am considering against my investment strategy.",
+					"Help me develop an investment thesis and work through the decision."
 				],
 				"logo": "./assets/icon.png",
 				"composerIcon": "./assets/icon.png",

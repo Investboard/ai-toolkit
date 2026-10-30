@@ -1,12 +1,41 @@
 # Investboard
 
-Four workflows for your own AI assistant: Investment Strategy Check,
-Investment Decision-Making, Investment Thesis and Portfolio Intelligence.
+**Second brain for investing**
+
+Investboard brings your portfolio, personal strategy and investment decisions
+together. Understand what you own, set out how you want to invest, and keep the
+reasons behind your choices. Bring that context into your AI assistant so each
+review can build on what you have already recorded.
+
+Four workflows: Investment Strategy Check, Investment Decision-Making,
+Investment Thesis and Portfolio Intelligence.
+
+## Install in ChatGPT or Codex
+
+[Open the published Investboard plugin](https://chatgpt.com/plugins/plugin_asdk_app_6acd243688888191a3eda79bea1ca0d0).
+In ChatGPT, install it and choose Try in chat. In Codex, search for Investboard
+in the plugin directory and select the public plugin published by Investboard.
+The plugin includes all four skills and the account connection. Start a new
+conversation with your files, or authorize account tools when you need them.
+Workspace policies may require administrator approval. Reuse an existing
+Investboard connection.
+
+## Install in Claude Code
+
+Add the [public GitHub marketplace](https://github.com/Investboard/ai-toolkit),
+then install the plugin:
+
+```sh
+claude plugin marketplace add Investboard/ai-toolkit
+claude plugin install investboard@investboard
+```
+
+Start a new session. Complete OAuth when you want account access.
 
 ## Start with a skill
 
 In Claude, enable code execution and file creation, then open Customize → Skills,
-choose Create skill → Upload a skill and upload an individual skill ZIP. Enable
+choose Add skill → Upload skill and upload an individual skill ZIP. Enable
 the skill and start a new conversation. Supply your own investing.md, notes or
 portfolio report, or connect your Investboard account separately.
 
@@ -14,7 +43,7 @@ For other skill-compatible assistants, install the skill folder using the
 assistant's documented skill installation flow. A skill does not sign you in,
 grant account access or supply current portfolio data.
 
-## Install the plugin locally
+## Local ZIP alternative
 
 The plugin ZIP has its manifest, MCP configuration and four skills at the root.
 The marketplace ZIP contains an `investboard-marketplace` directory with one
@@ -34,8 +63,9 @@ codex plugin marketplace add /absolute/path/to/investboard-marketplace
 ```
 
 Open the desktop plugin directory, select the Investboard source and install
-Investboard. Start a new conversation after installation. These are local
-marketplace routes, independent of public directory approval.
+Investboard. Start a new conversation after installation. These local
+marketplace routes are alternatives to the published plugin and public GitHub
+marketplace.
 
 The portable plugin also supplies the Agent Plugins format for clients such as
 Cursor. Follow the client's local import instructions. Format compatibility does
@@ -70,7 +100,8 @@ Investboard. Revocation does not recall information already shared.
 
 ## Updates and license
 
-Download versioned packages and checksums from the installation page. Preserve a
+Download versioned packages and checksums from the installation page or
+[public releases](https://github.com/Investboard/ai-toolkit/releases). Preserve a
 copy of the previous package if you need to return to it. File-only workflows
 have no live account connection and cannot refresh their supplied evidence.
 

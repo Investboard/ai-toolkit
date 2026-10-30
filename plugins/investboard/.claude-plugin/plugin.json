@@ -1,8 +1,8 @@
 {
 	"name": "investboard",
 	"displayName": "Investboard",
-	"version": "2.1.0",
-	"description": "Investment strategy, decisions, theses and portfolio intelligence with your connected Investboard account or supplied reports.",
+	"version": "2.1.1",
+	"description": "Second brain for investing. Bring your portfolio, strategy and investment reasoning into your AI assistant.",
 	"author": {
 		"name": "Investboard",
 		"url": "https://investboard.com"
