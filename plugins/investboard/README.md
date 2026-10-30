@@ -10,6 +10,19 @@ review can build on what you have already recorded.
 Four workflows: Investment Strategy Check, Investment Decision-Making,
 Investment Thesis and Portfolio Intelligence.
 
+## Before you connect
+
+All four skills can work with files you supply without an Investboard subscription.
+**The full connected experience requires Investboard Premium:** portfolio
+analytics and reading saved check history, investment theses and journal entries.
+Free accounts include one connection for policy and status, checks and recording
+decisions you state. Your AI assistant provider's subscription is separate.
+Connecting an assistant does not start a subscription or change your plan.
+
+[Create an Investboard account](https://investboard.com/sign-up) and complete
+setup, then return to your assistant to connect.
+[Compare Free and Premium](https://investboard.com/pricing).
+
 ## Install in ChatGPT or Codex
 
 [Open the published Investboard plugin](https://chatgpt.com/plugins/plugin_asdk_app_6acd243688888191a3eda79bea1ca0d0).
@@ -39,6 +52,7 @@ In Claude, enable code execution and file creation, then open Customize → Skil
 choose Add skill → Upload skill and upload an individual skill ZIP. Enable
 the skill and start a new conversation. Supply your own investing.md, notes or
 portfolio report, or connect your Investboard account separately.
+Each skill folder includes a bilingual account-and-plan README.
 
 For other skill-compatible assistants, install the skill folder using the
 assistant's documented skill installation flow. A skill does not sign you in,
