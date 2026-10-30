@@ -4,6 +4,18 @@
 
 Bring your investment strategy, portfolio and recorded reasoning into your AI assistant. Use four skills with your own reports, or connect Investboard to work with your policy, permitted records and portfolio analytics.
 
+## Before you connect
+
+All four skills can work with files you supply without an Investboard subscription.
+**The full connected experience requires Investboard Premium:** portfolio analytics
+and reading saved check history, investment theses and journal entries. Free accounts
+include one connection for policy and status, checks and recording decisions you state.
+Your AI assistant provider's subscription is separate from Investboard Premium.
+Connecting an assistant does not start a subscription or change your plan.
+
+[Create an Investboard account](https://investboard.com/sign-up) and complete setup,
+then return to your assistant to connect. [Compare Free and Premium](https://investboard.com/pricing).
+
 [Choose your assistant and install Investboard](https://investboard.com/product/ai-toolkit#install)
 
 ## Four skills for better investment decisions
