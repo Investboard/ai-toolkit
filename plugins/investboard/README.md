@@ -14,7 +14,8 @@ Investment Thesis and Portfolio Intelligence.
 
 [Open the published Investboard plugin](https://chatgpt.com/plugins/plugin_asdk_app_6acd243688888191a3eda79bea1ca0d0).
 In ChatGPT, install it and choose Try in chat. In Codex, search for Investboard
-in the plugin directory and select the public plugin published by Investboard.
+in the plugin directory and choose its public directory entry. Local marketplace
+and personal test entries are separate copies.
 The plugin includes all four skills and the account connection. Start a new
 conversation with your files, or authorize account tools when you need them.
 Workspace policies may require administrator approval. Reuse an existing
@@ -104,6 +105,8 @@ Download versioned packages and checksums from the installation page or
 [public releases](https://github.com/Investboard/ai-toolkit/releases). Preserve a
 copy of the previous package if you need to return to it. File-only workflows
 have no live account connection and cannot refresh their supplied evidence.
+Download versions are separate from the published OpenAI plugin version. A newer
+repository commit does not mean its ZIP release is already published.
 
 The package is proprietary, as declared in its manifest. Use is subject to the
 linked Investboard terms. No application source or private review credentials

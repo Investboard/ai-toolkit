@@ -10,6 +10,7 @@
 				"source": "local",
 				"path": "./plugins/investboard"
 			},
+			"category": "Finance",
 			"policy": {
 				"installation": "AVAILABLE",
 				"authentication": "ON_INSTALL"

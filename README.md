@@ -19,7 +19,7 @@ Skills work with evidence you supply. They do not sign you in or create access t
 
 ## Install in ChatGPT or Codex
 
-[Open the published Investboard plugin](https://chatgpt.com/plugins/plugin_asdk_app_6acd243688888191a3eda79bea1ca0d0). In ChatGPT, install it and choose **Try in chat**. In Codex, search for Investboard in the plugin directory and select the public plugin published by Investboard. Start a new conversation with your files, or authorize your Investboard account when you need connected tools. Reuse an existing connection; workspace policies may require administrator approval.
+[Open the published Investboard plugin](https://chatgpt.com/plugins/plugin_asdk_app_6acd243688888191a3eda79bea1ca0d0). In ChatGPT, install it and choose **Try in chat**. In Codex, search for Investboard and choose its public directory entry. Local marketplace and personal test entries are separate copies. Start a new conversation with your files, or authorize your Investboard account when you need connected tools. Reuse an existing connection; workspace policies may require administrator approval.
 
 ## Install in Claude Code
 
@@ -73,7 +73,7 @@ Manage permissions, portfolio sharing and revocation in Investboard’s assistan
 
 ## Downloads and updates
 
-[Download the latest release](https://github.com/Investboard/ai-toolkit/releases/latest) for the complete plugin, marketplace bundle or individual skills. Release assets include SHA-256 checksums. The website offers the same versioned archives.
+[Download the latest release](https://github.com/Investboard/ai-toolkit/releases/latest) for the complete plugin, marketplace bundle or individual skills. Release assets include SHA-256 checksums. The website also hosts versioned downloads. A newer repository commit does not mean its ZIP release is already published. Download versions are separate from the published OpenAI plugin version.
 
 Update the installed skills or plugin through your client’s update flow. Update individual ZIP installations by uploading the newer version. Package versions are separate from the MCP server’s Registry version.
 
