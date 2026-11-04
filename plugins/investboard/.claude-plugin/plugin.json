@@ -8,6 +8,11 @@
 		"url": "https://investboard.com"
 	},
 	"homepage": "https://investboard.com/help",
+	"privacyPolicyUrl": "https://investboard.com/privacy",
+	"documentationUrl": "https://investboard.com/product/ai-toolkit#install",
+	"supportUrl": "https://investboard.com/help",
+	"termsOfServiceUrl": "https://investboard.com/terms",
+	"repository": "https://github.com/Investboard/ai-toolkit",
 	"license": "Proprietary",
 	"keywords": [
 		"investing",
