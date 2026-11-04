@@ -46,6 +46,9 @@ Start a new conversation. The plugin includes all four skills and the Investboar
 
 ## Install individual skills
 
+For native client setup, see [VS Code / GitHub Copilot](clients/vscode/README.md)
+and [Gemini CLI](clients/gemini/README.md).
+
 Use a skills-compatible assistant and choose the skills you want:
 
 ```sh
