@@ -1,0 +1,25 @@
+{
+  "name": "investboard",
+  "version": "2.1.2",
+  "description": "Investment strategy, decisions, theses and portfolio intelligence with supplied files or authorized Investboard account context.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "investboard": {
+      "httpUrl": "https://app.investboard.com/mcp",
+      "oauth": {
+        "enabled": true,
+        "scopes": [
+          "openid",
+          "email",
+          "offline_access",
+          "policy:read",
+          "check:run",
+          "reflection:read",
+          "reflection:write",
+          "record:read",
+          "portfolio:read"
+        ]
+      }
+    }
+  }
+}
