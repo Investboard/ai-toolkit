@@ -2,21 +2,27 @@
 
 **Second brain for investing**
 
-Bring your investment strategy, portfolio and recorded reasoning into your AI assistant. Use four skills with your own reports, or connect Investboard to work with your policy, permitted records and portfolio analytics.
+Use four skills to understand portfolio exposures, review a proposed change against your own rules, work through a decision or clarify an investment thesis. Start with files you supply; connect your Investboard account when you need permitted account data.
 
-## Before you connect
+## Try Portfolio Intelligence with sample files
 
-All four skills can work with files you supply without an Investboard subscription.
-**The full connected experience requires Investboard Premium:** portfolio analytics
-and reading saved check history, investment theses and journal entries. Free accounts
-include one connection for policy and status, checks and recording decisions you state.
-Your AI assistant provider's subscription is separate from Investboard Premium.
-Connecting an assistant does not start a subscription or change your plan.
+Use a fictional portfolio to see how two funds can hold the same companies. No Investboard account or subscription is needed for this example. Your assistant provider has its own requirements and fees.
 
-[Create an Investboard account](https://investboard.com/sign-up) and complete setup,
-then return to your assistant to connect. [Compare Free and Premium](https://investboard.com/pricing).
+1. **Install Portfolio Intelligence.** In a terminal with Node.js 22.20 or later and a skills-compatible assistant, run the command below and select `portfolio-intelligence`. For ChatGPT, Codex, Claude chat or Claude Code, use the [installation options below](#install-in-chatgpt-or-codex). If the skill is already installed, use it.
 
-[Choose your assistant and install Investboard](https://investboard.com/product/ai-toolkit#install)
+   ```sh
+   npx skills add Investboard/ai-toolkit
+   ```
+
+2. **Save and attach both CSVs** to a new conversation: [sample-portfolio.csv](examples/portfolio-overlap/sample-portfolio.csv) and [sample-fund-holdings.csv](examples/portfolio-overlap/sample-fund-holdings.csv). On GitHub, open each file and use its raw-file download control. All funds, companies and weights are synthetic.
+
+3. **Send this prompt:**
+
+   > Use Portfolio Intelligence with these two synthetic CSV files. Calculate each company's share of the total portfolio, identify holdings shared by the two funds and explain concentration. Keep cash separate. State the date, currency, coverage and missing evidence. Use only these files; do not look up real securities, connect an account or save records. Do not infer correlations without return series.
+
+**Check the result:** Synthetic Company A represents **39%** of the sample portfolio, Synthetic Company B **27%**, and cash **10%**. No return series is supplied, so a historical correlation cannot be calculated. See the [worked example and data definitions](examples/portfolio-overlap/README.md) for the full breakdown.
+
+If you find the toolkit useful, [give it a star on GitHub](https://github.com/Investboard/ai-toolkit).
 
 ## Four skills for better investment decisions
 
@@ -61,6 +67,18 @@ The repository also includes a portable Agent Plugins manifest and a Codex marke
 
 ## Connect your Investboard account
 
+All four skills can work with files you supply without an Investboard subscription.
+**The full connected experience requires Investboard Premium:** portfolio analytics
+and reading saved check history, investment theses and journal entries. Free accounts
+include one connection for policy and status, checks and recording decisions you state.
+Your AI assistant provider's subscription is separate from Investboard Premium.
+Connecting an assistant does not start a subscription or change your plan.
+
+[Create an Investboard account](https://investboard.com/sign-up) and complete setup,
+then return to your assistant to connect. [Compare Free and Premium](https://investboard.com/pricing).
+
+[Choose your assistant and install Investboard](https://investboard.com/product/ai-toolkit#install)
+
 Use the direct remote MCP endpoint with OAuth:
 
 ```text
@@ -71,7 +89,7 @@ Sign in to your own Investboard account. If you already have this connection, us
 
 Start with: “Read my Investboard policy and explain its date and rules. Do not run a check or record a decision yet.”
 
-### Ten connected tools
+### Connected capabilities
 
 | Tools | Capability |
 | --- | --- |
