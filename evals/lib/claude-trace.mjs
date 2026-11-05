@@ -1,3 +1,4 @@
+import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
 import { digest, fail, SKILLS, validateTrace } from "./contracts.mjs";
 import { validateSession } from "./local-session.mjs";
@@ -54,11 +55,33 @@ export function normalizeClaude(session, events, journal, { kind, sourceRef }) {
 			"A complete, successful client capture is required; keep incomplete originals separately",
 		);
 	if (
-		init[0].claude_code_version &&
 		session.configuration.client !==
-			`Claude Code ${init[0].claude_code_version}`
+		`Claude Code ${init[0].claude_code_version}`
 	)
 		fail("Client version differs from prepared configuration");
+	if (!session.workspace_paths.includes(init[0].cwd))
+		fail("Client workspace differs from the prepared session");
+	const plugins = init[0].plugins,
+		expectedSkills =
+			session.condition === "with_skill" ? [...SKILLS].sort() : [];
+	if (
+		!Array.isArray(plugins) ||
+		(session.condition === "without_skill"
+			? plugins.length !== 0
+			: plugins.length !== 1 ||
+				plugins[0].name !== "investboard" ||
+				!session.workspace_paths.some(
+					(workspace) =>
+						path.join(workspace, "plugins/investboard") === plugins[0].path,
+				)) ||
+		!Array.isArray(init[0].skills) ||
+		!isDeepStrictEqual(init[0].skills.map(skillId).sort(), expectedSkills) ||
+		(init[0].plugin_errors !== undefined &&
+			(!Array.isArray(init[0].plugin_errors) || init[0].plugin_errors.length))
+	)
+		fail(
+			"Client plugin or available-skill inventory differs from the prepared session",
+		);
 	if (
 		!Array.isArray(init[0].mcp_servers) ||
 		init[0].mcp_servers.length !== 1 ||
@@ -115,15 +138,63 @@ export function normalizeClaude(session, events, journal, { kind, sourceRef }) {
 		fail("Capture must identify the exact prepared model without fallback");
 	if ([...results.keys()].some((id) => !ids.has(id)))
 		fail("Orphan tool result");
+	const denied = new Map();
+	if (
+		!Array.isArray(end[0].permission_denials) ||
+		end[0].permission_denials.length > 200 ||
+		uses.length > 200
+	)
+		fail(
+			"Terminal permission-denial evidence is missing or exceeds capture limits",
+		);
+	for (const denial of end[0].permission_denials) {
+		const use = uses.find((u) => u.id === denial?.tool_use_id);
+		if (
+			!use ||
+			denied.has(use.id) ||
+			denial.tool_name !== use.name ||
+			!isDeepStrictEqual(denial.tool_input, use.input ?? {})
+		)
+			fail(
+				"Terminal permission denial does not match a unique captured tool attempt",
+			);
+		if (results.has(use.id) && !results.get(use.id).is_error)
+			fail("Permission denial contradicts a successful tool result");
+		denied.set(use.id, denial);
+	}
+	for (const event of events.filter(
+		(e) => e.type === "system" && e.subtype === "permission_denied",
+	)) {
+		const denial = denied.get(event.tool_use_id);
+		if (!denial || denial.tool_name !== event.tool_name)
+			fail("Permission-denied event lacks matching terminal evidence");
+	}
 	const mock = journal.filter((r) => r.type === "tool_call"),
 		consumed = new Set(),
 		loaded = new Set();
 	const calls = [];
 	for (const use of uses) {
 		const result = results.get(use.id);
-		if (!result) fail("Missing tool result; preserve the incomplete capture");
+		if (!result && !denied.has(use.id))
+			fail("Missing tool result; preserve the incomplete capture");
 		const args = use.input ?? {},
-			status = result.is_error ? "error" : "success";
+			status = denied.has(use.id) || result.is_error ? "error" : "success";
+		if (denied.has(use.id)) {
+			// Permission-layer refusals never reach the fixture server. Retain the
+			// attempted name/arguments instead of requiring a nonexistent server call.
+			calls.push({
+				name: use.name.startsWith("mcp__investboard__")
+					? use.name.slice("mcp__investboard__".length)
+					: use.name === "Skill"
+						? "load_skill"
+						: use.name,
+				arguments:
+					use.name === "Skill" ? { ...args, skill: skillId(args.skill) } : args,
+				status: "error",
+				result: result?.content ?? { code: "permission_denied" },
+			});
+			continue;
+		}
 		if (use.name.startsWith("mcp__investboard__")) {
 			const name = use.name.slice("mcp__investboard__".length);
 			const index = mock.findIndex(

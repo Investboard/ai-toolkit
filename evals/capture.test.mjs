@@ -13,7 +13,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { normalizeClaude } from "./lib/claude-trace.mjs";
-import { digest } from "./lib/contracts.mjs";
+import { digest, SKILLS } from "./lib/contracts.mjs";
 import { gradeSuite } from "./lib/grade.mjs";
 import {
 	prepareSession,
@@ -61,6 +61,23 @@ function capture(session, calls = [], skill = undefined) {
 			type: "system",
 			subtype: "init",
 			claude_code_version: "unit-test",
+			cwd: session.workspace_paths[0],
+			plugins:
+				session.condition === "with_skill"
+					? [
+							{
+								name: "investboard",
+								path: path.join(
+									session.workspace_paths[0],
+									"plugins/investboard",
+								),
+							},
+						]
+					: [],
+			skills:
+				session.condition === "with_skill"
+					? SKILLS.map((skill) => `investboard:${skill}`)
+					: [],
 			mcp_servers: [{ name: "investboard", status: "connected" }],
 			tools: ["Skill", ...MOCK_TOOLS.map((t) => `mcp__investboard__${t.name}`)],
 		},
@@ -119,6 +136,7 @@ function capture(session, calls = [], skill = undefined) {
 		type: "result",
 		subtype: "success",
 		is_error: false,
+		permission_denials: [],
 		result: "Synthetic answer for adapter tests.",
 	});
 	return { events, journal };
@@ -128,6 +146,211 @@ const normalize = (session, events, journal) =>
 		kind: "synthetic",
 		sourceRef: "private-unit-simulation",
 	});
+
+// Review regressions: protocol simulations only, never actual model captures.
+test("negative controls require the prepared workspace, plugin and available-skill inventory", async (t) => {
+	for (const condition of ["with_skill", "without_skill"]) {
+		const { session } = await prepared(t, "negative-unrelated-task", condition);
+		const correct = capture(session);
+		assert.doesNotThrow(() =>
+			normalize(session, correct.events, correct.journal),
+		);
+		for (const mutate of [
+			(e) => {
+				delete e.cwd;
+			},
+			(e) => {
+				e.cwd = "/unrelated/workspace";
+			},
+			(e) => {
+				delete e.claude_code_version;
+			},
+			(e) => {
+				delete e.plugins;
+			},
+			(e) => {
+				delete e.skills;
+			},
+			(e) => {
+				e.plugins.push({ name: "unexpected", path: "/other/plugin" });
+			},
+			(e) => {
+				e.skills.push("unexpected-skill");
+			},
+			(e) => {
+				e.plugin_errors = [
+					{ plugin: "investboard", type: "manifest-validation-error" },
+				];
+			},
+			...(condition === "with_skill"
+				? [
+						(e) => {
+							e.plugins = [];
+							e.skills = [];
+						},
+						(e) => {
+							e.plugins[0].path = "/unrelated/plugins/investboard";
+						},
+						(e) => {
+							e.skills.pop();
+						},
+					]
+				: []),
+		]) {
+			const raw = capture(session);
+			mutate(raw.events[0]);
+			assert.throws(
+				() => normalize(session, raw.events, raw.journal),
+				/workspace|Client version|inventory/,
+			);
+		}
+	}
+});
+test("fixture replay budgets cover reordered arguments and all pages of a tool", async (t) => {
+	const a = await prepared(t, "decision-explicit-outcome"),
+		b = await prepared(t, "decision-period-and-pagination");
+	for (const { directory, session } of [a, b]) {
+		const rows = [];
+		const handle = await createFixtureServer(session, directory, async (row) =>
+			rows.push(row),
+		);
+		await handle({ jsonrpc: "2.0", id: 1, method: "initialize" });
+		const call = (fixture, args = fixture.arguments) =>
+			handle({
+				jsonrpc: "2.0",
+				id: 2,
+				method: "tools/call",
+				params: { name: fixture.name, arguments: args },
+			});
+		for (const fixture of session.packet.tool_fixtures)
+			assert.equal((await call(fixture)).result.isError, false);
+		const first = session.packet.tool_fixtures[0];
+		const reordered = Object.fromEntries(
+			Object.entries(first.arguments).reverse(),
+		);
+		assert.equal((await call(first, reordered)).result.isError, true);
+		assert.equal(
+			rows.filter((r) => r.type === "tool_call").length,
+			session.packet.tool_fixtures.length + 1,
+		);
+	}
+});
+test("authoritative denied calls remain errors without a fixture-server invocation", async (t) => {
+	const { session } = await prepared(
+		t,
+		"negative-unrelated-task",
+		"without_skill",
+	);
+	for (const name of ["Bash", "mcp__investboard__record_decision", "Skill"]) {
+		for (const includeResult of [true, false]) {
+			const raw = capture(session, [], "investment-decision-making");
+			const use = raw.events[1].message.content[0];
+			use.name = name;
+			use.input =
+				name === "Skill"
+					? { skill: "investboard:investment-decision-making" }
+					: {
+							check_id: "11111111-1111-4111-8111-111111111111",
+							outcome: "proceeded",
+						};
+			raw.events[2].message.content[0].is_error = true;
+			raw.events[2].message.content[0].content =
+				"Denied by client permissions.";
+			raw.events.at(-1).permission_denials = [
+				{ tool_name: name, tool_use_id: use.id, tool_input: use.input },
+			];
+			raw.events.splice(2, 0, {
+				type: "system",
+				subtype: "permission_denied",
+				tool_name: name,
+				tool_use_id: use.id,
+			});
+			if (!includeResult) raw.events.splice(3, 1);
+			const trace = normalize(session, raw.events, raw.journal);
+			assert.equal(trace.tool_calls.length, 1);
+			assert.equal(trace.tool_calls[0].status, "error");
+			assert.equal(
+				trace.tool_calls[0].name,
+				name === "Skill"
+					? "load_skill"
+					: name.replace("mcp__investboard__", ""),
+			);
+			assert.deepEqual(trace.skills_loaded, []);
+			const result = gradeSuite(suite, [trace]).results.find(
+				(r) => r.trace_sha256,
+			);
+			assert.equal(result.harness_checks, "fail");
+			assert.equal(result.status, "harness_only");
+		}
+	}
+});
+test("normalizer refuses missing, orphan, duplicate and contradictory denial evidence", async (t) => {
+	const { session } = await prepared(t);
+	for (const mutate of [
+		(r) => {
+			delete r.events.at(-1).permission_denials;
+		},
+		(r) => {
+			r.events.at(-1).permission_denials = {};
+		},
+		(r) => {
+			r.events.at(-1).permission_denials = [
+				{ tool_name: "Bash", tool_use_id: "not-captured", tool_input: {} },
+			];
+		},
+		(r) => {
+			const use = r.events[1].message.content[0];
+			r.events.at(-1).permission_denials = [
+				{ tool_name: use.name, tool_use_id: use.id, tool_input: use.input },
+			];
+		},
+		(r) => {
+			const use = r.events[1].message.content[0];
+			r.events[2].message.content[0].is_error = true;
+			r.events.at(-1).permission_denials = [
+				{ tool_name: "wrong-name", tool_use_id: use.id, tool_input: use.input },
+			];
+		},
+		(r) => {
+			const use = r.events[1].message.content[0];
+			r.events[2].message.content[0].is_error = true;
+			const denial = {
+				tool_name: use.name,
+				tool_use_id: use.id,
+				tool_input: use.input,
+			};
+			r.events.at(-1).permission_denials = [denial, denial];
+		},
+		(r) => {
+			r.events.splice(1, 0, {
+				type: "system",
+				subtype: "permission_denied",
+				tool_name: "Bash",
+				tool_use_id: "missing",
+			});
+		},
+		(r) => {
+			r.events.splice(1, 0, { type: "system", subtype: "permission_denied" });
+		},
+	]) {
+		const raw = capture(session, [], session.packet.skill);
+		mutate(raw);
+		assert.throws(
+			() => normalize(session, raw.events, raw.journal),
+			/denial|denied/i,
+		);
+	}
+	const executed = capture(session, session.packet.tool_fixtures);
+	const use = executed.events[1].message.content[0];
+	executed.events[2].message.content[0].is_error = true;
+	executed.events.at(-1).permission_denials = [
+		{ tool_name: use.name, tool_use_id: use.id, tool_input: use.input },
+	];
+	assert.throws(
+		() => normalize(session, executed.events, executed.journal),
+		/Unaccounted/,
+	);
+});
 
 test("smoke selection is eight unique cases covering four skills and negative controls", () => {
 	assert.equal(SMOKE_CASES.length, 8);

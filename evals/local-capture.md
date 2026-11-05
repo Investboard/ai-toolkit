@@ -55,8 +55,10 @@ old provenance.
 The account tool descriptors are deliberately simplified synthetic interfaces:
 all 12 account tools remain visible in every case, including writes in no-consent
 cases. They are not production input/output schema coverage. Declared fixture
-calls return their supplied projection. Unexpected calls and excess replays
-return an error and remain in the journal. No write reaches a real account.
+calls return their supplied projection. The call budget is counted per tool
+across all argument values and pages; reordering keys cannot reset it. Unexpected
+calls and excess replays return an error and remain in the journal. No write
+reaches a real account.
 `read_file` can read only the copied, hash-bound attachments and skill files;
 absolute paths, traversal, symlinks, edits and other files are refused.
 
@@ -107,9 +109,20 @@ node scripts/capture-skills.mjs normalize \
 Use `--kind synthetic` for hand-authored streams or grader simulations. Only
 actual client executions may be labelled `captured`. Normalization checks
 consistency, not authenticity. It requires a complete successful stream, the
-prepared exact model, the isolated tool inventory and local MCP initialization.
-Every MCP call/result must match the server journal. Unknown or denied tool
-attempts are retained; they are not hidden by normalization. Visible assistant
+prepared client version, exact model and workspace, the isolated tool inventory
+and local MCP initialization. The init message must list the copied Investboard
+plugin and all four available skills for `with_skill`, and neither for the
+baseline, with no plugin errors. Availability is checked separately from actual
+activation; a failed plugin load cannot pass a negative control.
+Executed MCP calls/results must match the server journal. Permission-layer
+refusals do not reach that server: the adapter retains them as errors using the
+terminal `permission_denials` record, which is the client's
+[authoritative denial evidence](https://code.claude.com/docs/en/agent-sdk/typescript#sdkpermissiondenial).
+Every denial must match a unique captured tool attempt by ID, name and input.
+Missing terminal evidence, orphan/duplicate denials and contradictory successful
+results stop normalization. A separate error result is optional only when a
+matching terminal denial proves the refusal. Unknown or denied tool attempts
+are retained; they are not hidden by normalization. Visible assistant
 commentary before tool calls is retained in `answer` along with the final answer,
 so an early disclosure cannot disappear from outgoing-evidence checks.
 

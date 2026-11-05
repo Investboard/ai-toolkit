@@ -130,10 +130,10 @@ export async function createFixtureServer(session, directory, record) {
 			const fixture = session.packet.tool_fixtures.find(
 				(f) => f.name === name && isDeepStrictEqual(f.arguments, args),
 			);
-			const key = digest({ name, args });
-			counts.set(key, (counts.get(key) ?? 0) + 1);
+			// Match the grader's per-tool budget, independent of argument key order.
+			counts.set(name, (counts.get(name) ?? 0) + 1);
 			outcome =
-				fixture && counts.get(key) <= (session.packet.max_calls[name] ?? 1)
+				fixture && counts.get(name) <= (session.packet.max_calls[name] ?? 1)
 					? { status: fixture.status, result: fixture.result }
 					: {
 							status: "error",

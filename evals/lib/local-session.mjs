@@ -42,6 +42,11 @@ export function validateSession(s) {
 		!CONDITIONS.includes(s.condition) ||
 		!s.packet?.case_sha256 ||
 		!Array.isArray(s.files) ||
+		!Array.isArray(s.workspace_paths) ||
+		!s.workspace_paths.length ||
+		s.workspace_paths.some(
+			(p) => typeof p !== "string" || !path.isAbsolute(p),
+		) ||
 		!s.file_hashes ||
 		s.files.some(
 			(f) =>
@@ -151,6 +156,9 @@ export async function prepareSession(root, directory, options) {
 	};
 	const session = {
 		schema_version: 1,
+		workspace_paths: [
+			...new Set([path.resolve(workspace), await realpath(workspace)]),
+		],
 		condition: options.condition,
 		packet,
 		skills_sha256: suite.skills_sha256,
