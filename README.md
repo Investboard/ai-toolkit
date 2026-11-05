@@ -110,6 +110,10 @@ Manage permissions, portfolio sharing and revocation in Investboard’s assistan
 
 Update the installed skills or plugin through your client’s update flow. Update individual ZIP installations by uploading the newer version. Package versions are separate from the MCP server’s Registry version.
 
+## Evaluate the skills
+
+The [offline evaluation harness](evals/README.md) includes 24 synthetic scenarios for the four skills. Validate the cases locally or grade saved agent traces with explicit human review. The harness makes no model calls; synthetic fixtures and missing runs do not count as behavior passes.
+
 ## License and help
 
 This distribution is proprietary, as declared in the plugin manifests. Use is subject to the [Investboard terms](https://investboard.com/terms). Public availability does not grant an open-source license.
