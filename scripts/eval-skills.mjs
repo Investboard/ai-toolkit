@@ -70,15 +70,16 @@ export async function main(args) {
 				status: result.status,
 				behavior_status: result.behavior_status,
 				summary: result.summary,
+				comparison: result.comparison,
 				output: destination,
 			}),
 		);
 	} else console.log(JSON.stringify(result, null, 2));
-	return command === "validate" || result.status === "pass"
+	if (command === "validate") return 0;
+	if (result.status === "fail") return 1;
+	return result.status === "pass" && result.comparison.status !== "incompatible"
 		? 0
-		: result.status === "fail"
-			? 1
-			: 2;
+		: 2;
 }
 if (
 	process.argv[1] &&

@@ -146,7 +146,15 @@ export function validateTrace(t) {
 	if (!/^[a-f0-9]{64}$/.test(t.case_sha256)) fail("Invalid case fingerprint");
 	object(
 		t.provenance,
-		["kind", "environment", "client", "model", "source_ref", "skills_sha256"],
+		[
+			"kind",
+			"environment",
+			"client",
+			"model",
+			"source_ref",
+			"skills_sha256",
+			"configuration_sha256",
+		],
 		"trace provenance",
 	);
 	const p = t.provenance;
@@ -158,6 +166,11 @@ export function validateTrace(t) {
 			"Only labelled synthetic-environment captures or grader fixtures are accepted",
 		);
 	for (const key of ["client", "model", "source_ref"]) string(p[key], key, 500);
+	if (
+		typeof p.configuration_sha256 !== "string" ||
+		!/^[a-f0-9]{64}$/.test(p.configuration_sha256)
+	)
+		fail("Invalid execution configuration fingerprint");
 	if (t.condition === "with_skill") {
 		if (!/^[a-f0-9]{64}$/.test(p.skills_sha256 ?? ""))
 			fail("Invalid skill fingerprint");

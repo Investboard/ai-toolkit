@@ -33,6 +33,10 @@ function trace(c, overrides = {}) {
 			model: "not-a-model-run",
 			source_ref: "unit-fixture",
 			skills_sha256: suite.skills_sha256,
+			configuration_sha256: digest({
+				tools: "unit-fixtures",
+				parameters: "unit-config",
+			}),
 		},
 		skills_loaded: ["any", "none"].includes(c.skill) ? [] : [c.skill],
 		tool_calls: c.required_calls.map((required) =>
@@ -381,6 +385,112 @@ test("CLI refuses live mode and returns incomplete for empty captured evidence",
 	});
 	assert.equal(live.status, 1);
 });
+test("expected result arrays have exact membership and array type", () => {
+	const c = find("thesis-unreadable-link");
+	for (const items of [[{ id: "unexpected-row" }], {}]) {
+		const t = trace(c);
+		t.tool_calls.at(-1).result.items = items;
+		assert.ok(
+			graded(t, c).failures.some((f) => f.check_id === "tool_fixture_mismatch"),
+		);
+	}
+	const c2 = find("thesis-ambiguous-security"),
+		t2 = trace(c2);
+	t2.tool_calls[0].result.candidates.push({ ticker: "UNEXPECTED" });
+	assert.equal(graded(t2, c2).status, "fail");
+});
+test("object projections still permit additional non-projected result fields", () => {
+	const c = find("thesis-quote-original"),
+		t = trace(c);
+	t.tool_calls[0].result.conviction = null;
+	assert.equal(graded(t, c).status, "pass");
+});
+test("comparison refuses differing client, model or execution configuration", () => {
+	const c = find("thesis-file-draft");
+	for (const field of ["client", "model", "configuration_sha256"]) {
+		const withSkill = trace(c),
+			baseline = trace(c, { condition: "without_skill", skills_loaded: [] });
+		baseline.provenance.skills_sha256 = null;
+		baseline.provenance[field] =
+			field === "configuration_sha256" ? "0".repeat(64) : "different";
+		const report = gradeSuite(
+			suite,
+			[withSkill, baseline],
+			[...reviewsFor(withSkill, c), ...reviewsFor(baseline, c)],
+		);
+		assert.equal(report.comparison.status, "incompatible");
+		assert.equal(
+			Object.hasOwn(report.comparison, "additional_passing_cases"),
+			false,
+		);
+	}
+});
+test("mixing execution profiles inside one condition is rejected", () => {
+	const a = trace(find("thesis-file-draft")),
+		b = trace(find("portfolio-overlap-file-only"));
+	b.provenance.model = "different-model";
+	assert.throws(
+		() => gradeSuite(suite, [a, b]),
+		/one client, model and configuration/,
+	);
+});
+test("traces must declare a valid execution configuration fingerprint", () => {
+	for (const value of [
+		undefined,
+		null,
+		["0".repeat(64)],
+		"not-a-fingerprint",
+	]) {
+		const t = trace(find("thesis-file-draft"));
+		t.provenance.configuration_sha256 = value;
+		assert.throws(() => gradeSuite(suite, [t]), /configuration fingerprint/);
+	}
+});
+test("CLI exits incomplete for an incompatible baseline despite with-skill passes", async () => {
+	const dir = await mkdtemp(
+		path.join(os.tmpdir(), "investboard-profile-test-"),
+	);
+	try {
+		const traces = [],
+			reviews = [];
+		for (const c of suite.cases)
+			for (const condition of ["with_skill", "without_skill"]) {
+				const t = trace(c, { condition });
+				if (condition === "without_skill") {
+					t.skills_loaded = [];
+					t.provenance.skills_sha256 = null;
+					t.provenance.model = "different-model";
+				}
+				traces.push(t);
+				reviews.push(...reviewsFor(t, c));
+			}
+		const file = path.join(dir, "traces.jsonl"),
+			marks = path.join(dir, "reviews.jsonl");
+		await writeFile(file, traces.map((t) => JSON.stringify(t)).join("\n"));
+		await writeFile(marks, reviews.map((r) => JSON.stringify(r)).join("\n"));
+		const run = spawnSync(
+			process.execPath,
+			[
+				path.join(root, "scripts/eval-skills.mjs"),
+				"grade",
+				"--traces",
+				file,
+				"--reviews",
+				marks,
+				"--output",
+				path.join(dir, "report.json"),
+			],
+			{ encoding: "utf8" },
+		);
+		assert.equal(run.status, 2);
+		const report = JSON.parse(run.stdout);
+		assert.equal(report.summary.with_skill.pass, 24);
+		assert.equal(report.comparison.status, "incompatible");
+	} finally {
+		await rm(dir, { recursive: true, force: true });
+	}
+});
+
 test("CLI never overwrites reports and malformed JSON never echoes payloads", async () => {
 	const dir = await mkdtemp(path.join(os.tmpdir(), "investboard-eval-test-"));
 	try {

@@ -11,6 +11,13 @@ import {
 function matches(actual, expected) {
 	if (expected === null || typeof expected !== "object")
 		return actual === expected;
+	if (Array.isArray(expected))
+		return (
+			Array.isArray(actual) &&
+			actual.length === expected.length &&
+			expected.every((value, index) => matches(actual[index], value))
+		);
+	if (Array.isArray(actual)) return false;
 	if (!actual || typeof actual !== "object") return false;
 	return Object.entries(expected).every(
 		([key, value]) => Object.hasOwn(actual, key) && matches(actual[key], value),
@@ -102,8 +109,21 @@ export function gradeSuite(suite, traces, reviews = []) {
 	const cases = new Map(suite.cases.map((c) => [c.id, c]));
 	const captures = new Map();
 	const hashes = new Map();
+	const profiles = new Map();
 	for (const t of traces) {
 		validateTrace(t);
+		if (t.provenance.kind === "captured") {
+			const profile = JSON.stringify([
+				t.provenance.client,
+				t.provenance.model,
+				t.provenance.configuration_sha256,
+			]);
+			if (profiles.has(t.condition) && profiles.get(t.condition) !== profile)
+				fail(
+					"Captured traces in one condition must use one client, model and configuration",
+				);
+			profiles.set(t.condition, profile);
+		}
 		if (!cases.has(t.case_id)) fail("Trace names an unknown case");
 		const key = `${t.case_id}:${t.condition}`;
 		if (captures.has(key))
@@ -189,6 +209,10 @@ export function gradeSuite(suite, traces, reviews = []) {
 	const comparisonComplete = results.every((r) =>
 		["pass", "fail"].includes(r.status),
 	);
+	const incompatible =
+		profiles.has("with_skill") &&
+		profiles.has("without_skill") &&
+		profiles.get("with_skill") !== profiles.get("without_skill");
 	return {
 		schema_version: 1,
 		kind: "recorded_skill_evaluation",
@@ -197,13 +221,18 @@ export function gradeSuite(suite, traces, reviews = []) {
 		skills_sha256: suite.skills_sha256,
 		case_count: suite.case_count,
 		summary,
-		comparison: comparisonComplete
+		comparison: incompatible
 			? {
-					status: "complete",
-					additional_passing_cases:
-						summary.with_skill.pass - summary.without_skill.pass,
+					status: "incompatible",
+					reason: "client_model_or_configuration_mismatch",
 				}
-			: { status: "incomplete" },
+			: comparisonComplete
+				? {
+						status: "complete",
+						additional_passing_cases:
+							summary.with_skill.pass - summary.without_skill.pass,
+					}
+				: { status: "incomplete" },
 		results,
 	};
 }
