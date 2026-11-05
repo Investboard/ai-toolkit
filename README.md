@@ -8,7 +8,7 @@ Use four skills to understand portfolio exposures, review a proposed change agai
 
 Use a fictional portfolio to see how two funds can hold the same companies. No Investboard account or subscription is needed for this example. Your assistant provider has its own requirements and fees.
 
-1. **Install Portfolio Intelligence.** In a terminal with Node.js and a skills-compatible assistant, run the command below and select `portfolio-intelligence`. For ChatGPT, Codex, Claude chat or Claude Code, use the [installation options below](#install-in-chatgpt-or-codex). If the skill is already installed, use it.
+1. **Install Portfolio Intelligence.** In a terminal with Node.js 22.20 or later and a skills-compatible assistant, run the command below and select `portfolio-intelligence`. For ChatGPT, Codex, Claude chat or Claude Code, use the [installation options below](#install-in-chatgpt-or-codex). If the skill is already installed, use it.
 
    ```sh
    npx skills add Investboard/ai-toolkit
