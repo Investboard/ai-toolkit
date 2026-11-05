@@ -33,6 +33,10 @@ node scripts/eval-skills.mjs grade \
 That also exits 2. Its observation is `harness_only`, never a model pass.
 Unit-test simulations exercise the grader; they are not model evaluation results.
 
+For session preparation, a local stdio fixture server and Claude Code stream
+normalization, see [Local Claude capture](local-capture.md). Those commands also
+make no model calls. Running a prepared Claude invocation is a separate activity.
+
 ## Collecting evidence later
 
 Model execution is a separate, explicitly budgeted activity. This harness does
@@ -120,6 +124,9 @@ Normalize `structuredContent` into `result`; preserve error/timeout outcomes.
 For local file-reading helpers, use `read_file` and normalize
 `arguments.path` to a repository-relative attachment or loaded-skill path.
 For a purely local calculator, use `calculate` with only an `expression`.
+The Claude adapter records native `Skill` calls as `load_skill`, retaining the
+skill identifier and any arguments. Successful activation must agree with
+`skills_loaded`; baseline and unknown-skill activations fail.
 Do not relabel shell execution, networking or unrelated helpers as these tools.
 Unknown tools fail closed. Required calls must occur in the declared order;
 per-tool limits catch duplicate writes.

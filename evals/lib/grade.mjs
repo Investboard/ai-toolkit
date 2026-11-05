@@ -3,6 +3,7 @@ import {
 	digest,
 	fail,
 	LOCAL_TOOLS,
+	SKILLS,
 	safeRelative,
 	validateReview,
 	validateTrace,
@@ -58,6 +59,19 @@ function automatic(c, trace, skillsHash) {
 			reject("unallowed_tool");
 		if (call.name === "read_file" && !allowedRead(c, trace, call))
 			reject("unallowed_file_read");
+		if (
+			call.name === "load_skill" &&
+			(trace.condition !== "with_skill" ||
+				!SKILLS.includes(call.arguments.skill) ||
+				Object.keys(call.arguments).some(
+					(key) => !["skill", "args"].includes(key),
+				) ||
+				(call.arguments.args !== undefined &&
+					typeof call.arguments.args !== "string") ||
+				(call.status === "success" &&
+					!trace.skills_loaded.includes(call.arguments.skill)))
+		)
+			reject("invalid_skill_activation");
 		if (
 			call.name === "calculate" &&
 			(typeof call.arguments.expression !== "string" ||

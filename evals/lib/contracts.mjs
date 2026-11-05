@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 
 export const CONDITIONS = ["with_skill", "without_skill"];
-export const LOCAL_TOOLS = ["read_file", "calculate"];
+export const LOCAL_TOOLS = ["read_file", "calculate", "load_skill"];
 export const SKILLS = [
 	"portfolio-intelligence",
 	"investment-strategy-check",
