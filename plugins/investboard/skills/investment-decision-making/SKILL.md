@@ -56,8 +56,12 @@ For a supplied-note comparison, use this evidence structure:
    continuing-hold or exit criterion is supplied, say so explicitly.
 2. **Unknown:** identify the missing observations, metric definition, position,
    time horizon or financing that actually affects the comparison.
-3. **Conditional trade-offs:** compare the investor's alternatives as possible
-   effects under stated assumptions. Do not call waiting or proceeding more
+3. **Conditional trade-offs:** compare only the alternatives whose meaning is
+   established. If the position or proposed action is unspecified, compare
+   information and timing, then ask what proceeding means. Do not map waiting
+   to being uninvested or proceeding to holding. Waiting can leave an existing
+   exposure unchanged. A business observation does not establish a return,
+   avoided loss or costless reversibility. Do not call either alternative more
    consistent with their rules without an explicit criterion that supports it.
 4. **Next question:** ask for the one missing input that would sharpen the choice.
 
@@ -125,6 +129,8 @@ retrospective, show the evidence reviewed, supported observations and questions
 for the next review. Attribute saved text and distinguish it from newly drafted
 wording. Never claim a draft was saved or a reported outcome was an executed
 order. A check outcome is write-once, including after a missing response.
+Read the existing outcome first after a timeout. If present, report it as final;
+do not offer or attempt another outcome for that check.
 
 ## Example requests
 
