@@ -50,6 +50,24 @@ Label additional criteria as proposals or questions for the investor, not rules
 they already chose. Do not assume they hold no position, or that waiting is free,
 when the supplied evidence does not establish that.
 
+For a supplied-note comparison, use this evidence structure:
+
+1. **Stated:** quote the investor's belief and review trigger. If no entry,
+   continuing-hold or exit criterion is supplied, say so explicitly.
+2. **Unknown:** identify the missing observations, metric definition, position,
+   time horizon or financing that actually affects the comparison.
+3. **Conditional trade-offs:** compare the investor's alternatives as possible
+   effects under stated assumptions. Do not call waiting or proceeding more
+   consistent with their rules without an explicit criterion that supports it.
+4. **Next question:** ask for the one missing input that would sharpen the choice.
+
+A review trigger says when to reassess, not what must happen before acting.
+Do not imply that the investor anticipated needing retention to hold before
+proceeding, precommitted to holding until a trigger, or chose an evidential entry
+standard they never stated. If an entry criterion might help, offer it as a
+proposal or question. Apply this boundary throughout the comparison, not only
+in a closing disclaimer.
+
 Discuss the alternatives the investor supplied without turning generated
 policy into a security selection. Compare reversibility, timing, consequences
 and uncertainty where relevant; do not rank choices with invented return
