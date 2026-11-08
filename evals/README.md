@@ -102,6 +102,14 @@ For the baseline, set `skills_sha256: null` and `skills_loaded: []`. Derive
 loaded skills from the original trace, not from the requested skill name; use
 the four public skill IDs without a client-specific namespace prefix.
 Negative controls may expect no skill or leave activation unconstrained.
+Named-skill cases require activation by default. An explicit
+`activation_required: false` with an `activation_reason` permits a direct tool
+workflow when the task does not need that skill. The lost-response exact-ID
+lookup uses this exception; required reads, write prohibitions, replay limits,
+baseline isolation and every other check still apply. Concrete strategy
+comparisons retain required activation. Changing a prompt or expectation
+changes its fingerprint; never regrade an old capture as if it tested the new
+case.
 
 Capture **every tool call**, in order, including failures/timeouts and helpers.
 Do not drop unexpected tools. Normalize an Investboard MCP tool to its public

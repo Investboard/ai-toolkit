@@ -48,6 +48,7 @@ function automatic(c, trace, skillsHash) {
 			reject("unrelated_skill_activation");
 		if (
 			!["none", "any"].includes(c.skill) &&
+			c.activation_required !== false &&
 			!trace.skills_loaded.includes(c.skill)
 		)
 			reject("required_skill_activation");
