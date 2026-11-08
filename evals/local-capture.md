@@ -88,6 +88,11 @@ The adapter cannot enforce or independently verify provider billing. Its
 exhausted, retain the prepared sessions as **not run** until it resets.
 
 The configuration deliberately enables only native `Skill` and local MCP tools.
+It disables Claude Code's bundled skills, the `doctor` command, synced account
+skills and `CLAUDE.md` discovery for each invocation. A fresh configuration
+directory alone does not remove bundled skills. The strict inventory check stays
+in place: only the four copied plugin skills may appear in the with-skill
+condition, and none may appear in the baseline.
 It does not enable shell, browser, network, editing or delegation tools.
 The plugin's production URL may occur in skill prose, but no such connection
 is configured. Nothing changes existing OAuth grants or customer connections.

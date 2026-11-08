@@ -401,6 +401,14 @@ test("preparation copies exact skills and attachments without production MCP, ho
 	assert.equal(invocation.args.includes("--strict-mcp-config"), true);
 	assert.equal(invocation.args.includes("--tools"), true);
 	assert.equal(invocation.args.includes("Bash"), false);
+	const settings = JSON.parse(
+		invocation.args[invocation.args.indexOf("--settings") + 1],
+	);
+	assert.equal(settings.disableBundledSkills, true);
+	assert.equal(settings.syncClaudeAiSkills, false);
+	assert.equal(invocation.env.CLAUDE_CODE_DISABLE_BUNDLED_SKILLS, "1");
+	assert.equal(invocation.env.CLAUDE_CODE_DISABLE_CLAUDE_MDS, "1");
+	assert.equal(invocation.env.DISABLE_DOCTOR_COMMAND, "1");
 	assert.equal(
 		(await readFile(path.join(directory, "invocation.json"), "utf8")).includes(
 			"app.investboard.com",
