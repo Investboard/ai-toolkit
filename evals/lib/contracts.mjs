@@ -46,6 +46,8 @@ export function validateCase(c) {
 		[
 			"id",
 			"skill",
+			"activation_required",
+			"activation_reason",
 			"prompt",
 			"files",
 			"allowed_tools",
@@ -61,6 +63,14 @@ export function validateCase(c) {
 	if (!/^[a-z0-9-]+$/.test(c.id)) fail("Invalid case id");
 	if (![...SKILLS, "none", "any"].includes(c.skill))
 		fail("Invalid expected skill");
+	if (Object.hasOwn(c, "activation_required")) {
+		if (typeof c.activation_required !== "boolean" || !SKILLS.includes(c.skill))
+			fail("Activation override requires a named skill and a boolean");
+		if (!c.activation_required)
+			string(c.activation_reason, "optional activation reason", 1000);
+	}
+	if (Object.hasOwn(c, "activation_reason") && c.activation_required !== false)
+		fail("Activation reason requires an explicit optional expectation");
 	string(c.prompt, "prompt");
 	for (const key of ["files", "allowed_tools", "forbidden_text"])
 		strings(c[key], key);

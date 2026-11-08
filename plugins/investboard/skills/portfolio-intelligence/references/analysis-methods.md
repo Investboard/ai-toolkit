@@ -15,6 +15,13 @@ with the valuation and foreign-exchange dates stated. A supplied weight-based
 analysis can use those weights if their scope and denominator are known.
 Account or holding weights from different denominators cannot simply be added.
 
+Keeping cash outside fund look-through is a decomposition choice, not a new
+denominator. For a hypothetical portfolio with 40% cash, a company exposure of
+18% of the whole portfolio equals `18 / 60 = 30%` of the non-cash portion.
+Use the words "of the whole portfolio" or "of the non-cash portion" only with
+the matching calculation. Label percentage-point contributions separately
+from percentages within a sleeve. Reconcile all rows on one stated basis.
+
 Keep unresolved and unvalued positions visible. Report a known subset as a
 subset; do not silently renormalize it to 100%. A coverage percentage must say
 what is covered: fund constituents, issuer identity, classification or returns.
@@ -54,6 +61,12 @@ For two distinct long-only funds with constituent weights on compatible bases,
 weighted holdings overlap is `sum(min(weight_A, weight_B))` over shared security
 identities. Sum duplicate constituent lines before taking each minimum. This
 measures shared fund weight, not the investor's total duplicated exposure.
+
+The overlap coefficient is not the share of an equal-weight blend invested in
+common names. For example, if fictional fund A has X=30%, Y=20%, Z=50% and fund B
+has X=10%, Y=40%, W=50%, overlap is `min(30, 10) + min(20, 40) = 30%`. The
+equal-weight blend instead has 50% in the shared names X and Y. Do not use those
+two meanings interchangeably or infer either from fund names alone.
 
 When using partial constituent lists, describe the observed overlap as a lower
 bound and state each fund's coverage. An empty observed intersection does not

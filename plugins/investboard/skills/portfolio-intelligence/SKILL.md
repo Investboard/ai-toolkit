@@ -54,6 +54,39 @@ an outcome the investor has stated.
 Read [Analysis methods](references/analysis-methods.md) for the relevant
 calculation or for interpreting an unfamiliar metric.
 
+Keep the supplied whole-portfolio basis by default; introduce a non-cash basis
+only when it helps answer the question. Label every percentage with its
+denominator before interpreting it. A company
+exposure calculated from whole-portfolio weights remains a percentage of the
+whole portfolio, including cash in that denominator. Keeping cash as a separate
+row does not change the basis of the other rows. Convert explicitly before
+describing a non-cash share: for example, a hypothetical 18% whole-portfolio
+exposure with 40% cash is `18 / (100 - 40) = 30%` of the non-cash portion.
+Do not describe it as 18% of that portion.
+
+Keep three quantities distinct: a company's whole-portfolio exposure, the
+combined exposure to shared names, and weighted overlap between two funds.
+Fund-pair overlap is `sum(min(weight_A, weight_B))` on compatible constituent
+weights; it is not the sum of the investor's exposures to shared companies.
+It is also not the percentage of an equal-weight blend allocated to common
+names. Explain the metric by its calculation without turning it into a share
+of a combined portfolio. When attributing a company's exposure to funds, use
+their actual weighted contributions; do not call unequal contributions equal.
+Show the relevant calculation and basis, and reconcile known exposures,
+unknown residuals and cash without silently normalizing a subset.
+
+Use a metric table with the value, basis and calculation for quantitative
+findings. Define the fund-pair overlap coefficient as **the weight that can be
+matched security by security between two separately normalized funds, taking
+the smaller weight for each security**. A common security can have unmatched
+weight when the two funds hold different amounts of it. If reporting the
+common-name share of an equal-weight blend, calculate it separately as the
+average of each fund's total weight in those names; do not reuse the overlap
+coefficient. Keep interpretation brief and refer to the measured table rather
+than adding new percentage glosses. Check every percentage sentence against
+its formula and denominator before answering; remove a paraphrase that changes
+the metric's meaning.
+
 - **Look-through:** trace fund weights to underlying holdings, combine direct
   and indirect exposures, and retain unknown portions of funds. Keep wrapper
   holdings distinct from their underlying exposures to avoid double counting.
