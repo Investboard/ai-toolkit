@@ -4,6 +4,10 @@ Try the Portfolio Intelligence skill with two small CSV files. This is a fiction
 teaching example: every fund, company, identifier and weight is synthetic. It
 contains no customer data, real securities, prices or observed returns.
 
+**Want the whole workflow?** [Continue from portfolio overlap to a strategy
+comparison and decision reflection](walkthrough.md). The four-step demo uses
+these same files and includes prompts and worked answers.
+
 ## Try it
 
 1. Install Portfolio Intelligence using the [toolkit installation options](../../README.md#install-in-chatgpt-or-codex).
