@@ -65,8 +65,18 @@ denominator. If you discuss an equal-weight blend, calculate that separately.
 Do not call account tools, browse, save anything or infer correlations.
 ```
 
-**Check the answer:** A and B appear in both funds. Three different questions
-produce three different numbers:
+**Check the answer:** A and B appear in both funds. Together they make up
+**66% of the whole portfolio**. The funds’ matched-weight overlap is **70%**:
+`min(40,50) + min(30,30)`. These answer different questions: your exposure to
+shared companies, and how much constituent weight can be matched between funds.
+
+Continue to the strategy comparison below. The extra denominator checks here
+are useful if you want to inspect the arithmetic more closely.
+
+<details>
+<summary>Optional: why 66%, 70% and 75% are different</summary>
+
+Three different questions produce three different numbers:
 
 | Question | Result | Calculation and basis |
 | --- | ---: | --- |
@@ -77,6 +87,8 @@ produce three different numbers:
 If the assistant introduces a non-cash denominator, A+B is `66 / 90 = 73.33%`
 of the current non-cash portion. It is not 66% of that portion. Fund overlap
 does not establish historical return correlation or future diversification.
+
+</details>
 
 ## 3. Compare a proposal with the investor's strategy
 
@@ -137,6 +149,8 @@ Then reflect as of February 14 using only the supplied observation. Distinguish
 the original January 31 snapshot, the stated choice, missing new evidence and
 the investor's next review date. Do not infer a new choice, current holdings,
 execution or performance. No account tools, saved record, overwrite or reminder.
+Label both outputs as fictional scenario drafts, not an account history or an
+observed result.
 ```
 
 **A useful text record would contain:**
