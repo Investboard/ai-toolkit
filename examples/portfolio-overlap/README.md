@@ -8,6 +8,10 @@ already stored by Investboard and an explicitly illustrative investor plan.
 The investor prefers buying underweights when feasible; the exercise compares
 that route with existing-cash purchases, sell-and-buy and a smaller-cash hybrid.
 
+For the intended account-based experience, see the [connected workflow
+preview](connected-walkthrough.md). Its rebalance MCP integration still needs
+implementation and verification; the file-only exercise is independently usable.
+
 ## What is real, and what is a scenario?
 
 The four observations in [sample-market-data.csv](sample-market-data.csv) are

@@ -15,6 +15,12 @@ investor plan. Compare **buying underweights with new cash first**, then existin
 cash, sell-and-buy and a smaller-cash hybrid. See the money required, resulting
 weights and remaining drift for each route, then draft a decision note.
 
+[Preview the connected rebalance workflow](examples/portfolio-overlap/connected-walkthrough.md):
+read your portfolio and mandate, compare options using Investboard's native
+calculation, and draft your reasoning. This account-based comparison is prepared
+ahead of its MCP integration; it is not available through the current connector.
+The supplied-file demo below works today.
+
 1. **Install Portfolio Intelligence** using the [AI-agent installation options](#install-in-chatgpt-or-codex) or [individual skills](#install-individual-skills). The full walkthrough also uses Investment Strategy Check and Investment Decision-Making.
 2. **Save and attach the four starting files** from the [walkthrough](examples/portfolio-overlap/walkthrough.md#try-it), then copy its first prompt into a new chat.
 3. **Check the output** against the [worked comparison](examples/portfolio-overlap/README.md#compare-four-ways-to-proceed).
