@@ -1,4 +1,4 @@
-start_date,base_currency,holding_id,isin,holding_name,initial_notional_eur,target_weight_pct,data_kind
-2025-11-10,EUR,IWDA.AS,IE00B4L5Y983,iShares Core MSCI World UCITS ETF USD (Acc),7000.00,70,illustrative_portfolio_notional
-2025-11-10,EUR,EXS1.DE,DE0005933931,iShares Core DAX UCITS ETF (DE),2000.00,20,illustrative_portfolio_notional
-2025-11-10,EUR,CASH_EUR,,Portfolio cash EUR,1000.00,10,illustrative_portfolio_notional
+start_date,base_currency,holding_id,isin,holding_name,asset_class,initial_notional_eur,data_kind
+2025-11-10,EUR,IWDA.AS,IE00B4L5Y983,iShares Core MSCI World UCITS ETF USD (Acc),equities,7000.00,illustrative_portfolio_notional
+2025-11-10,EUR,EXS1.DE,DE0005933931,iShares Core DAX UCITS ETF (DE),equities,2000.00,illustrative_portfolio_notional
+2025-11-10,EUR,CASH_EUR,,Portfolio cash EUR,cash,1000.00,illustrative_portfolio_notional

@@ -33,23 +33,26 @@ class RebalanceDemoTests(unittest.TestCase):
 
     def test_new_cash_changes_the_denominator_and_is_used_once(self):
         route = self.result['routes']['new_cash_buy_only']
-        self.assertGreater(self.result['current_weights_pct']['IWDA.AS'], 70)
-        self.assertGreater(route['changes_eur']['IWDA.AS'], 0)
+        self.assertGreater(self.result['current_weights_pct']['equities'], 90)
+        diluted = self.current['equities'] / (self.result['current_total_eur'] + D('400')) * 100
+        self.assertLess(diluted, 90)
+        self.assertGreater(route['changes_eur']['equities'], 0)
         self.assertEqual(sum(route['changes_eur'].values()), D('400'))
         self.assertEqual(sum(route['after_values_eur'].values()), self.result['current_total_eur'] + D('400'))
         self.assertEqual(route['gross_sales_eur'], 0)
         self.assertTrue(route['at_target_to_cent'])
         self.assertEqual(route['after_cost_feasibility'], 'not_established')
 
-    def test_cash_only_stays_in_bands_but_does_not_restore_all_targets(self):
-        route = self.result['routes']['existing_cash_only']
-        self.assertEqual(route['incoming_cash_eur'], 0)
-        self.assertEqual(sum(route['changes_eur'].values()), 0)
-        self.assertLess(route['after_values_eur'][verify.CASH], self.current[verify.CASH])
+    def test_small_contribution_stays_in_cash_without_inventing_an_equity_buy(self):
+        route = self.result['routes']['small_cash_buy_only']
+        self.assertEqual(route['incoming_cash_eur'], 100)
+        self.assertEqual(sum(route['changes_eur'].values()), 100)
+        self.assertEqual(route['changes_eur']['equities'], 0)
+        self.assertEqual(route['after_values_eur'][verify.CASH], self.current[verify.CASH] + 100)
         self.assertTrue(route['reserve_ok'])
         self.assertTrue(route['within_bands'])
         self.assertFalse(route['at_target_to_cent'])
-        self.assertLess(abs(route['max_abs_drift_pp'] - self.result['baseline']['max_abs_drift_pp']), D('0.001'))
+        self.assertLess(route['max_abs_drift_pp'], self.result['baseline']['max_abs_drift_pp'])
 
     def test_hybrid_reduces_sales_without_calling_new_cash_a_return(self):
         hybrid = self.result['routes']['hybrid']
@@ -85,7 +88,7 @@ class RebalanceDemoTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = self.copy_inputs(directory)
             path = root / 'sample-proposal.csv'
-            path.write_text(path.read_text().replace('85.09', '85.10'))
+            path.write_text(path.read_text().replace('229.38', '229.39'))
             with self.assertRaisesRegex(ValueError, 'Proposal does not match'):
                 verify.compare(root)
 

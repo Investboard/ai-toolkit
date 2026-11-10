@@ -2,11 +2,10 @@
   "data_kind": "illustrative_user_plan",
   "review_date": "2026-11-10",
   "valuation_date": "2026-11-09",
-  "scope": "This sample portfolio only; incoming contribution is outside it until deposited. No customer data.",
+  "scope": "Whole sample EUR portfolio. Both funds are equities; no individual fund targets. Incoming contributions are outside until deposited.",
   "target_weights_pct": {
-    "IWDA.AS": "70",
-    "EXS1.DE": "20",
-    "CASH_EUR": "10"
+    "equities": "90",
+    "cash": "10"
   },
   "tolerance_band_pp": "2",
   "minimum_portfolio_cash_eur": "800.00",
@@ -18,8 +17,8 @@
       "incoming_cash_eur": "400.00",
       "sell_allowed": false
     },
-    "existing_cash_only": {
-      "incoming_cash_eur": "0.00",
+    "small_cash_buy_only": {
+      "incoming_cash_eur": "100.00",
       "sell_allowed": false
     },
     "sell_and_buy": {
@@ -38,6 +37,7 @@
     "Dollar/euro proposal amounts are gross comparisons before fees, bid/ask spread and taxes. Cost basis, tax jurisdiction and broker execution rules are not supplied.",
     "Do not derive an executable share quantity from adjusted total-return series values. No current execution quote or confirmed fractional-share support is provided.",
     "Cash injected from outside the portfolio changes the denominator before identifying underweights. A contribution is not itself investment return.",
-    "A shortfall from exact targets is not automatically a breach of the tolerance bands. A plan within its bands does not mandate trading."
+    "A shortfall from exact targets is not automatically a breach of the tolerance bands. A plan within its bands does not mandate trading.",
+    "Targets apply to asset classes, not the individual equity funds. The comparison does not choose which fund to buy or sell. Gross notional amounts are not executable share quantities."
   ]
 }

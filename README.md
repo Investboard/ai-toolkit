@@ -11,9 +11,9 @@ whether to sell?**
 
 [Try the four-step rebalance demo](examples/portfolio-overlap/walkthrough.md#try-it).
 Use observed market series for MSCI World and DAX with an explicitly illustrative
-investor plan. Compare **buying underweights with new cash first**, then existing
-cash, sell-and-buy and a smaller-cash hybrid. See the money required, resulting
-weights and remaining drift for each route, then draft a decision note.
+investor plan. Compare **buying underweights with new cash first**, then a smaller
+contribution, sell-and-buy and a cash-plus-sale hybrid. See the money required,
+class weights and remaining drift, then draft a decision note.
 
 [Preview the connected rebalance workflow](examples/portfolio-overlap/connected-walkthrough.md):
 read your portfolio and mandate, compare options using Investboard's native
@@ -25,7 +25,7 @@ The supplied-file demo below works today.
 2. **Save and attach the four starting files** from the [walkthrough](examples/portfolio-overlap/walkthrough.md#try-it), then copy its first prompt into a new chat.
 3. **Check the output** against the [worked comparison](examples/portfolio-overlap/README.md#compare-four-ways-to-proceed).
 
-In this case, a €400 contribution restores the sample 70/20/10 targets gross
+In this case, a €400 contribution restores the sample 90/10 asset-class targets gross
 without selling. The unchanged portfolio is already inside its tolerance bands,
 so the plan does not require a trade. Starting notionals, targets and cash
 budgets are sample user inputs; the dated market observations are real.

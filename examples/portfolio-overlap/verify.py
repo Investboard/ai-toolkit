@@ -8,7 +8,7 @@ import json
 ROOT = Path(__file__).resolve().parent
 ZERO = Decimal('0')
 HUNDRED = Decimal('100')
-CASH = 'CASH_EUR'
+CASH = 'cash'
 
 
 def money(value):
@@ -50,14 +50,23 @@ def load_inputs(root=ROOT):
         start[key] = money(row['initial_notional_eur'])
         if start[key] < 0:
             raise ValueError('Negative notional')
-        if key != CASH and (key not in identities or row['isin'] != identities[key][0]):
+        if key != 'CASH_EUR' and (key not in identities or row['isin'] != identities[key][0]):
             raise ValueError('Portfolio and market listing identities differ')
         try:
-            current[key] = start[key] if key == CASH else money(
+            current[key] = start[key] if key == 'CASH_EUR' else money(
                 start[key] * observations[(key, plan['valuation_date'])]
                 / observations[(key, row['start_date'])])
         except KeyError as error:
             raise ValueError('Required valuation observation is missing') from error
+    holdings_current = current
+    holdings_start = start
+    current, start = {}, {}
+    for row in read_csv(root, 'sample-portfolio.csv'):
+        asset_class = row['asset_class']
+        if asset_class not in ('equities', CASH):
+            raise ValueError('Unsupported sample asset class')
+        current[asset_class] = current.get(asset_class, ZERO) + holdings_current[row['holding_id']]
+        start[asset_class] = start.get(asset_class, ZERO) + holdings_start[row['holding_id']]
     target = {key: Decimal(value) / HUNDRED
               for key, value in plan['target_weights_pct'].items()}
     if set(target) != set(current) or sum(target.values()) != 1:
@@ -131,25 +140,20 @@ def compare(root=ROOT):
         incoming = money(spec['incoming_cash_eur'])
         if incoming < 0 or incoming > available:
             raise ValueError('Route exceeds available external cash')
-        if name == 'new_cash_buy_only':
+        if name in ('new_cash_buy_only', 'small_cash_buy_only'):
             delta = buy_only_delta(current, target, incoming, floor)
-        elif name == 'existing_cash_only':
-            gap = max(ZERO, money(sum(current.values()) * target['EXS1.DE']) - current['EXS1.DE'])
-            spend = min(gap, max(ZERO, current[CASH] - floor))
-            delta = {key: ZERO for key in current}
-            delta['EXS1.DE'], delta[CASH] = spend, -spend
         else:
             delta = exact_delta(current, target, incoming)
         if not spec['sell_allowed'] and any(v < 0 for k, v in delta.items() if k != CASH):
             raise ValueError('Unexpected sale in a buy-only route')
         routes[name] = summarize(current, target, incoming, delta, plan)
     proposals = read_csv(root, 'sample-proposal.csv')
-    keys = [(r['route_id'], r['holding_id']) for r in proposals]
+    keys = [(r['route_id'], r['asset_class']) for r in proposals]
     expected = {(name, key) for name in routes for key in current}
     if len(keys) != len(expected) or set(keys) != expected:
         raise ValueError('Missing or duplicate proposal row')
     for row in proposals:
-        if Decimal(row['change_eur']) != routes[row['route_id']]['changes_eur'][row['holding_id']]:
+        if Decimal(row['change_eur']) != routes[row['route_id']]['changes_eur'][row['asset_class']]:
             raise ValueError('Proposal does not match the derived reference')
     baseline = summarize(current, target, ZERO, {key: ZERO for key in current}, plan)
     minimum = max(ZERO, max(current[k] / target[k] for k in current) - sum(current.values()))

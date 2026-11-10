@@ -1,25 +1,18 @@
-# Sample investor's plan and preferences
+# Sample investor's plan
 
-These are explicitly illustrative user inputs, not market facts or recommended
-weights. `sample-plan.json` carries the same machine-readable constraints.
+data_kind: illustrative_user_plan
 
-- Portfolio scope: the sample EUR investment portfolio, including its cash.
-- Targets: 70% MSCI World sleeve (IWDA.AS), 20% DAX sleeve (EXS1.DE), 10% cash.
-- Tolerance: ±2 percentage points around each target, including cash.
-- Keep at least EUR 800 in portfolio cash.
-- EUR 400 of new investable money is available outside this portfolio; count it
-  in portfolio value only when the chosen route brings it in. Do not count it twice.
-- Annual review does not require a trade. An unchanged portfolio within its
-  bands and cash floor is an admissible baseline.
-- Compare buying underweights with new money first. Consider existing-cash
-  purchases, sell-and-buy and a EUR 100 contribution plus a smaller sale too.
-- This is a fund-sleeve allocation, not a claim that the underlying companies
-  are distinct. No company-weight ceiling has been supplied.
+- Whole sample EUR portfolio: both supplied funds are equities.
+- Targets: 90% equities, 10% cash, each with ±2 percentage-point tolerance.
+- Keep at least €800 in portfolio cash.
+- €400 of new investable money is available outside the portfolio.
+- Prefer buying underweighted asset classes with new money before selling.
+- Compare an unchanged baseline, €400 with no sales, €100 with no sales,
+  a zero-contribution rebalance and a €100 hybrid.
+- No individual fund targets, forecast returns or mandatory annual trade.
 
-Use the same historical valuation snapshot for all four routes. Compare each
-route against its own post-contribution total. State what can be checked gross
-and what remains unknown after fees, spreads and taxes. The supplied adjusted
-total-return series does not provide executable prices or share quantities.
-
-Do not choose or execute a real investment for the reader, call account tools,
-save a check or infer a waiting rule from the annual-review trigger.
+An annual review is a reason to reassess, not a rule to trade or wait. Each
+contribution enters its own scenario's denominator once. A no-sale route may
+need to retain money in cash when equities are still overweight. Preserve
+unknown fees, tax inputs, execution prices and broker dealing constraints.
+These files authorize no account tools, import, saved check, outcome or order.
