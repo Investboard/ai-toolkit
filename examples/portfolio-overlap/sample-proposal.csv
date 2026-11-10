@@ -1,0 +1,9 @@
+route_id,asset_class,change_eur
+new_cash_buy_only,equities,229.38
+new_cash_buy_only,cash,170.62
+small_cash_buy_only,equities,0.00
+small_cash_buy_only,cash,100.00
+sell_and_buy,equities,-130.62
+sell_and_buy,cash,130.62
+hybrid,equities,-40.62
+hybrid,cash,140.62
