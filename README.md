@@ -4,34 +4,32 @@
 
 Use four skills to understand portfolio exposures, review a proposed change against your own rules, work through a decision or clarify an investment thesis. Start with files you supply; connect your Investboard account when you need permitted account data.
 
-## Try Portfolio Intelligence with sample files
+## Try a rebalance review with real market data
 
-Use a fictional portfolio to see how two funds can hold the same companies. No Investboard account or subscription is needed for this example. Your assistant provider has its own requirements and fees.
+**Your portfolio has drifted. What can available cash achieve before you decide
+whether to sell?**
 
-1. **Install Portfolio Intelligence.** In a terminal with Node.js 22.20 or later and a skills-compatible assistant, run the command below and select `portfolio-intelligence`. For ChatGPT, Codex, Claude chat or Claude Code, use the [installation options below](#install-in-chatgpt-or-codex). If the skill is already installed, use it.
+[Try the four-step rebalance demo](examples/portfolio-overlap/walkthrough.md#try-it).
+Use observed market series for MSCI World and DAX with an explicitly illustrative
+investor plan. Compare **buying underweights with new cash first**, then existing
+cash, sell-and-buy and a smaller-cash hybrid. See the money required, resulting
+weights and remaining drift for each route, then draft a decision note.
 
-   ```sh
-   npx skills add Investboard/ai-toolkit
-   ```
+1. **Install Portfolio Intelligence** using the [AI-agent installation options](#install-in-chatgpt-or-codex) or [individual skills](#install-individual-skills). The full walkthrough also uses Investment Strategy Check and Investment Decision-Making.
+2. **Save and attach the four starting files** from the [walkthrough](examples/portfolio-overlap/walkthrough.md#try-it), then copy its first prompt into a new chat.
+3. **Check the output** against the [worked comparison](examples/portfolio-overlap/README.md#compare-four-ways-to-proceed).
 
-2. **Save and attach both CSVs** to a new conversation: [sample-portfolio.csv](examples/portfolio-overlap/sample-portfolio.csv) and [sample-fund-holdings.csv](examples/portfolio-overlap/sample-fund-holdings.csv). On GitHub, open each file and use its raw-file download control. All funds, companies and weights are synthetic.
+In this case, a €400 contribution restores the sample 70/20/10 targets gross
+without selling. The unchanged portfolio is already inside its tolerance bands,
+so the plan does not require a trade. Starting notionals, targets and cash
+budgets are sample user inputs; the dated market observations are real.
+Execution prices, fees, spreads and taxes still need their own inputs.
 
-3. **Send this prompt:**
+No Investboard account or broker connection is needed for the file-only demo.
+Your AI provider’s account requirements, quota and fees apply. Worked answers
+are reference calculations, not a model transcript or a claimed behavior pass.
 
-   > Use Portfolio Intelligence with these two synthetic CSV files. Calculate each company's share of the total portfolio, identify holdings shared by the two funds and explain concentration. Keep cash separate. State the date, currency, coverage and missing evidence. Use only these files; do not look up real securities, connect an account or save records. Do not infer correlations without return series.
-
-**Check the result:** Synthetic Company A represents **39%** of the sample portfolio, Synthetic Company B **27%**, and cash **10%**. No return series is supplied, so a historical correlation cannot be calculated. See the [worked example and data definitions](examples/portfolio-overlap/README.md) for the full breakdown.
-
-If you find the toolkit useful, [give it a star on GitHub](https://github.com/Investboard/ai-toolkit).
-
-### See what a change in fund weights can hide
-
-[Try the four-step demo: portfolio → overlap → strategy → reflection](examples/portfolio-overlap/walkthrough.md).
-The same fictional company rises from 39% to 40.5% of the portfolio, above the
-sample investor's own limit, while fund overlap stays at 70%. Use four copyable
-prompts to uncover the exposure, compare the proposal and reflect on a stated
-decision. Sample files and worked results are included; no account connection
-is needed.
+If the toolkit helps, [give it a star on GitHub](https://github.com/Investboard/ai-toolkit).
 
 ## Four skills for better investment decisions
 

@@ -1,35 +1,25 @@
-# Fictional investor's strategy
+# Sample investor's plan and preferences
 
-Data kind: synthetic teaching example. Written January 31, 2026.
-These are the fictional investor's own rules, not Investboard recommendations.
+These are explicitly illustrative user inputs, not market facts or recommended
+weights. `sample-plan.json` carries the same machine-readable constraints.
 
-## Objective and rules
+- Portfolio scope: the sample EUR investment portfolio, including its cash.
+- Targets: 70% MSCI World sleeve (IWDA.AS), 20% DAX sleeve (EXS1.DE), 10% cash.
+- Tolerance: ±2 percentage points around each target, including cash.
+- Keep at least EUR 800 in portfolio cash.
+- EUR 400 of new investable money is available outside this portfolio; count it
+  in portfolio value only when the chosen route brings it in. Do not count it twice.
+- Annual review does not require a trade. An unchanged portfolio within its
+  bands and cash floor is an admissible baseline.
+- Compare buying underweights with new money first. Consider existing-cash
+  purchases, sell-and-buy and a EUR 100 contribution plus a smaller sale too.
+- This is a fund-sleeve allocation, not a claim that the underlying companies
+  are distinct. No company-weight ceiling has been supplied.
 
-- My objective is to build long-term wealth over an 18-year horizon.
-- Keep equities between 60% and 90% of the whole portfolio, inclusive.
-- Keep at least 10% of the whole portfolio in cash.
-- Keep each underlying company at or below 40% of the whole portfolio,
-  including all fund look-through exposure.
-- For this exercise only, both fictional funds consist entirely of equities.
-  Each constituent file is complete and its identifiers are unambiguous.
+Use the same historical valuation snapshot for all four routes. Compare each
+route against its own post-contribution total. State what can be checked gross
+and what remains unknown after fees, spreads and taxes. The supplied adjusted
+total-return series does not provide executable prices or share quantities.
 
-The 40% ceiling is deliberately high to make this small arithmetic example
-easy to follow. It is not a suggested concentration limit.
-
-## Proposal I want to examine
-
-Move 15 percentage points of the whole portfolio from Synthetic Global Fund
-to Synthetic Technology Fund, leaving cash unchanged. This is an internal
-reallocation, with no external contribution or withdrawal. The resulting
-weights are in sample-proposal.csv. This is a hypothetical comparison, not
-an instruction to trade or save a check.
-
-I am considering this because I want to understand how changing the fund mix
-changes the companies underneath it. I have not supplied a return forecast,
-valuation, fee schedule, tax position or evidence of future outperformance.
-
-## Review trigger
-
-I would revisit this proposal if updated holdings or a revised allocation
-changes the company exposures. A review means reassessing the evidence; it
-does not specify whether I should proceed, hold, sell or defer.
+Do not choose or execute a real investment for the reader, call account tools,
+save a check or infer a waiting rule from the annual-review trigger.

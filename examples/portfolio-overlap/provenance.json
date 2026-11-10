@@ -1,0 +1,36 @@
+{
+  "captured_on": "2026-11-10",
+  "observed_data": "Four dated total-return-series observations from Investboard’s existing global FMP benchmark cache. No new provider API or model call.",
+  "holdings_and_policy": "Starting notionals, target weights, tolerance band, cash floor, contribution budgets and later sample choice are illustrative user inputs, not market facts or recommendations.",
+  "source_currency": "EUR listings confirmed against issuer listing information; benchmark schema itself does not store currency.",
+  "series_value_warning": "These values are stored adjusted total-return series observations. They support modeled sleeve growth over the fixed historical period, not executable market orders, realized tax gains or reconstructed share holdings.",
+  "sources": [
+    {
+      "title": "FMP historical EOD data documentation",
+      "url": "https://site.financialmodelingprep.com/developer/docs/stable/historical-price-eod-full"
+    },
+    {
+      "title": "iShares Core MSCI World UCITS ETF USD (Acc)",
+      "isin": "IE00B4L5Y983",
+      "url": "https://www.ishares.com/uk/individual/en/products/251882/ISHARES_MSCI_WORLD_UCITS_ETF",
+      "listing": "Euronext Amsterdam / IWDA / EUR"
+    },
+    {
+      "title": "iShares Core DAX UCITS ETF (DE)",
+      "isin": "DE0005933931",
+      "url": "https://www.ishares.com/uk/individual/en/products/251464/fund",
+      "listing": "Xetra / EXS1 / EUR"
+    },
+    {
+      "title": "Investor.gov: asset allocation and rebalancing",
+      "url": "https://www.investor.gov/additional-resources/general-resources/publications-research/info-sheets/beginners-guide-asset"
+    }
+  ],
+  "snapshot_sha256": "fc4bddc64e07b79c81129eb4886458a5e74205bd288805082baad67fe397006d",
+  "limitations": [
+    "No provider accuracy certification or live execution quote.",
+    "No company-level fund constituents; fund-sleeve weights are not disjoint company exposures. MSCI World already includes German companies.",
+    "No forecast, after-cost feasibility pass or investment-performance claim.",
+    "No account connection, transaction, recorded outcome or reminder is authorized by these files."
+  ]
+}

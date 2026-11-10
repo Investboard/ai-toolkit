@@ -1,0 +1,43 @@
+{
+  "data_kind": "illustrative_user_plan",
+  "review_date": "2026-11-10",
+  "valuation_date": "2026-11-09",
+  "scope": "This sample portfolio only; incoming contribution is outside it until deposited. No customer data.",
+  "target_weights_pct": {
+    "IWDA.AS": "70",
+    "EXS1.DE": "20",
+    "CASH_EUR": "10"
+  },
+  "tolerance_band_pp": "2",
+  "minimum_portfolio_cash_eur": "800.00",
+  "external_cash_available_eur": "400.00",
+  "review_trigger": "Annual review, not a requirement to trade. Keeping the portfolio unchanged is a valid baseline if its rules still hold.",
+  "preference": "Compare buying underweights with available new cash first. Preserve the cash reserve; do not sell merely to improve a displayed score. Preference is conditional on feasibility and the investor choice.",
+  "routes": {
+    "new_cash_buy_only": {
+      "incoming_cash_eur": "400.00",
+      "sell_allowed": false
+    },
+    "existing_cash_only": {
+      "incoming_cash_eur": "0.00",
+      "sell_allowed": false
+    },
+    "sell_and_buy": {
+      "incoming_cash_eur": "0.00",
+      "sell_allowed": true
+    },
+    "hybrid": {
+      "incoming_cash_eur": "100.00",
+      "sell_allowed": true
+    }
+  },
+  "calculation_assumptions": [
+    "Value each fund sleeve by its observed total-return-series ratio, then round the modeled value to EUR cents. These are not observed customer holdings.",
+    "Both series are EUR listings on the same two valuation dates. Do not mix listings or currencies.",
+    "Cash earns zero interest in the illustration; no interim contributions or withdrawals. These are scenario assumptions, not observations.",
+    "Dollar/euro proposal amounts are gross comparisons before fees, bid/ask spread and taxes. Cost basis, tax jurisdiction and broker execution rules are not supplied.",
+    "Do not derive an executable share quantity from adjusted total-return series values. No current execution quote or confirmed fractional-share support is provided.",
+    "Cash injected from outside the portfolio changes the denominator before identifying underweights. A contribution is not itself investment return.",
+    "A shortfall from exact targets is not automatically a breach of the tolerance bands. A plan within its bands does not mandate trading."
+  ]
+}

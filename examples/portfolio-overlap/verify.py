@@ -1,124 +1,171 @@
-#!/usr/bin/env python3
-"""Reproduce this example's arithmetic offline; no model or account access."""
-
-import csv
-import json
-from collections import defaultdict
-from decimal import Decimal
+"""Offline gross rebalance reference; no model, provider or account calls."""
 from pathlib import Path
-
+from decimal import Decimal, ROUND_HALF_UP, ROUND_CEILING
+import csv
+import hashlib
+import json
 
 ROOT = Path(__file__).resolve().parent
-ZERO = Decimal(0)
-HUNDRED = Decimal(100)
+ZERO = Decimal('0')
+HUNDRED = Decimal('100')
+CASH = 'CASH_EUR'
 
 
-def require(condition, message):
-    if not condition:
-        raise ValueError(message)
+def money(value):
+    return Decimal(value).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
 
-def read_rows(name, weight_column):
-    with (ROOT / name).open(newline="", encoding="utf-8") as source:
-        rows = list(csv.DictReader(source))
-    require(bool(rows), f"{name}: empty file")
-    for row in rows:
-        require(row["as_of"] == "2026-01-31", f"{name}: unexpected date")
-        require(row["data_kind"] == "synthetic", f"{name}: unlabeled data")
-        weight = Decimal(row[weight_column])
-        require(weight.is_finite() and ZERO <= weight <= HUNDRED,
-                f"{name}: invalid weight")
-        row[weight_column] = weight
-    return rows
+def read_csv(root, name):
+    with (root / name).open() as stream:
+        return list(csv.DictReader(stream))
 
 
-def analyze(rows, constituents):
-    require(sum((r["portfolio_weight_pct"] for r in rows), ZERO) == HUNDRED,
-            "Portfolio weights must sum to 100")
-    exposures = defaultdict(Decimal)
-    cash = ZERO
-    seen = set()
-    for row in rows:
-        identity = row["holding_id"]
-        require(identity not in seen, "Duplicate portfolio holding")
-        seen.add(identity)
-        require(row["base_currency"] == "EUR", "Unexpected currency")
-        weight = row["portfolio_weight_pct"]
-        if row["holding_type"] == "cash":
-            cash += weight
+def load_inputs(root=ROOT):
+    plan = json.loads((root / 'sample-plan.json').read_text())
+    provenance = json.loads((root / 'provenance.json').read_text())
+    raw = (root / 'sample-market-data.csv').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != provenance['snapshot_sha256']:
+        raise ValueError('Market observation snapshot hash mismatch')
+    market = read_csv(root, 'sample-market-data.csv')
+    observations, identities = {}, {}
+    for row in market:
+        key = (row['holding_id'], row['valuation_date'])
+        if key in observations:
+            raise ValueError('Duplicate listing/date observation')
+        if row['currency'] != 'EUR' or row['return_basis'] != 'total_return':
+            raise ValueError('Mixed currency or unsupported return basis')
+        identity = (row['isin'], row['dataset_stamp'])
+        if row['holding_id'] in identities and identities[row['holding_id']] != identity:
+            raise ValueError('Mixed listing identity or source dataset')
+        identities[row['holding_id']] = identity
+        value = Decimal(row['observed_series_value'])
+        if not value.is_finite() or value <= 0:
+            raise ValueError('Nonpositive or nonfinite series value')
+        observations[key] = value
+    start, current = {}, {}
+    for row in read_csv(root, 'sample-portfolio.csv'):
+        key = row['holding_id']
+        if key in start or row['base_currency'] != 'EUR':
+            raise ValueError('Duplicate holding or mixed portfolio currency')
+        start[key] = money(row['initial_notional_eur'])
+        if start[key] < 0:
+            raise ValueError('Negative notional')
+        if key != CASH and (key not in identities or row['isin'] != identities[key][0]):
+            raise ValueError('Portfolio and market listing identities differ')
+        try:
+            current[key] = start[key] if key == CASH else money(
+                start[key] * observations[(key, plan['valuation_date'])]
+                / observations[(key, row['start_date'])])
+        except KeyError as error:
+            raise ValueError('Required valuation observation is missing') from error
+    target = {key: Decimal(value) / HUNDRED
+              for key, value in plan['target_weights_pct'].items()}
+    if set(target) != set(current) or sum(target.values()) != 1:
+        raise ValueError('Target keys or total do not match the portfolio')
+    if any(not t.is_finite() or t <= 0 for t in target.values()):
+        raise ValueError('This reference requires positive finite targets')
+    return plan, target, start, current
+
+
+def allocation(values):
+    total = sum(values.values())
+    return {key: value / total * HUNDRED for key, value in values.items()}
+
+
+def exact_delta(current, target, incoming):
+    total = sum(current.values()) + incoming
+    after = {key: money(total * share) for key, share in target.items() if key != CASH}
+    after[CASH] = total - sum(after.values())
+    return {key: after[key] - current[key] for key in current}
+
+
+def buy_only_delta(current, target, incoming, cash_floor):
+    """Measure deficits AFTER injecting cash; never spend more than new cash."""
+    if incoming < 0:
+        raise ValueError('Negative contribution')
+    total = sum(current.values()) + incoming
+    deficits = {key: max(ZERO, money(total * target[key]) - value)
+                for key, value in current.items() if key != CASH}
+    cap = min(incoming, max(ZERO, current[CASH] + incoming - cash_floor))
+    required = sum(deficits.values())
+    scale = min(Decimal('1'), cap / required) if required else ZERO
+    delta = {key: money(deficits[key] * scale) for key in deficits}
+    # Money rounding must never overspend the cash cap.
+    while sum(delta.values()) > cap:
+        key = max(delta, key=delta.get)
+        delta[key] -= Decimal('0.01')
+    delta[CASH] = incoming - sum(delta.values())
+    return delta
+
+
+def summarize(current, target, incoming, delta, plan):
+    if sum(delta.values()) != incoming:
+        raise ValueError('Cash flow is not conserved')
+    after = {key: current[key] + delta[key] for key in current}
+    if any(value < 0 for value in after.values()):
+        raise ValueError('Negative final value')
+    weights = allocation(after)
+    band = Decimal(plan['tolerance_band_pp'])
+    return dict(
+        incoming_cash_eur=incoming,
+        changes_eur=delta,
+        after_values_eur=after,
+        after_weights_pct=weights,
+        gross_sales_eur=sum(-v for k, v in delta.items() if k != CASH and v < 0),
+        gross_buys_eur=sum(v for k, v in delta.items() if k != CASH and v > 0),
+        reserve_ok=after[CASH] >= Decimal(plan['minimum_portfolio_cash_eur']),
+        within_bands=all(abs(weights[k] - target[k] * HUNDRED) <= band for k in target),
+        at_target_to_cent=all(abs(after[k] - money(sum(after.values()) * target[k])) <= Decimal('0.01') for k in target),
+        after_cost_feasibility='not_established',
+        executable_share_quantities='not_available_from_total_return_series',
+    )
+
+
+def compare(root=ROOT):
+    plan, target, start, current = load_inputs(root)
+    floor = Decimal(plan['minimum_portfolio_cash_eur'])
+    available = Decimal(plan['external_cash_available_eur'])
+    routes = {}
+    for name, spec in plan['routes'].items():
+        incoming = money(spec['incoming_cash_eur'])
+        if incoming < 0 or incoming > available:
+            raise ValueError('Route exceeds available external cash')
+        if name == 'new_cash_buy_only':
+            delta = buy_only_delta(current, target, incoming, floor)
+        elif name == 'existing_cash_only':
+            gap = max(ZERO, money(sum(current.values()) * target['EXS1.DE']) - current['EXS1.DE'])
+            spend = min(gap, max(ZERO, current[CASH] - floor))
+            delta = {key: ZERO for key in current}
+            delta['EXS1.DE'], delta[CASH] = spend, -spend
         else:
-            require(row["holding_type"] == "fund" and identity in constituents,
-                    "Unknown holding or missing constituent coverage")
-            for company, fund_weight in constituents[identity].items():
-                exposures[company] += weight * fund_weight / HUNDRED
-    require(sum(exposures.values(), cash) == HUNDRED,
-            "Look-through and cash do not reconcile")
-    return dict(exposures), cash
+            delta = exact_delta(current, target, incoming)
+        if not spec['sell_allowed'] and any(v < 0 for k, v in delta.items() if k != CASH):
+            raise ValueError('Unexpected sale in a buy-only route')
+        routes[name] = summarize(current, target, incoming, delta, plan)
+    proposals = read_csv(root, 'sample-proposal.csv')
+    keys = [(r['route_id'], r['holding_id']) for r in proposals]
+    expected = {(name, key) for name in routes for key in current}
+    if len(keys) != len(expected) or set(keys) != expected:
+        raise ValueError('Missing or duplicate proposal row')
+    for row in proposals:
+        if Decimal(row['change_eur']) != routes[row['route_id']]['changes_eur'][row['holding_id']]:
+            raise ValueError('Proposal does not match the derived reference')
+    baseline = summarize(current, target, ZERO, {key: ZERO for key in current}, plan)
+    minimum = max(ZERO, max(current[k] / target[k] for k in current) - sum(current.values()))
+    minimum = minimum.quantize(Decimal('0.01'), rounding=ROUND_CEILING)
+    return dict(status='gross_reference_comparison_verified',
+                start_values_eur=start, current_values_eur=current,
+                current_weights_pct=allocation(current), current_total_eur=sum(current.values()),
+                modeled_historical_growth_eur=sum(current.values())-sum(start.values()),
+                minimum_new_cash_for_exact_unrounded_targets_eur=minimum,
+                baseline=baseline, routes=routes, model_calls=0)
 
 
-def main():
-    constituents = defaultdict(dict)
-    for row in read_rows("sample-fund-holdings.csv", "fund_weight_pct"):
-        fund, company = row["fund_id"], row["company_id"]
-        require(company not in constituents[fund], "Duplicate constituent")
-        constituents[fund][company] = row["fund_weight_pct"]
-    require(set(constituents) == {"DEMO_GLOBAL_FUND", "DEMO_TECH_FUND"},
-            "Unexpected funds")
-    require(all(sum(weights.values(), ZERO) == HUNDRED
-                for weights in constituents.values()), "Incomplete fund coverage")
-    current_rows = read_rows("sample-portfolio.csv", "portfolio_weight_pct")
-    proposed_rows = read_rows("sample-proposal.csv", "portfolio_weight_pct")
-    current, cash = analyze(current_rows, constituents)
-    proposed, proposed_cash = analyze(proposed_rows, constituents)
-
-    # Independent expected values for the public worked example, on a whole-
-    # portfolio basis. Decimal avoids silently rounding a rule-boundary breach.
-    expected_current = dict(zip(
-        ["DEMO_A", "DEMO_B", "DEMO_C", "DEMO_D", "DEMO_E"],
-        map(Decimal, ["39", "27", "12", "6", "6"])))
-    expected_proposed = dict(zip(expected_current,
-                                map(Decimal, ["40.5", "27", "9", "4.5", "9"])))
-    require(current == expected_current, "Current worked exposures changed")
-    require(proposed == expected_proposed, "Proposed worked exposures changed")
-    require(cash == proposed_cash == Decimal(10), "Cash must remain 10%")
-    old = {r["holding_id"]: r["portfolio_weight_pct"] for r in current_rows}
-    new = {r["holding_id"]: r["portfolio_weight_pct"] for r in proposed_rows}
-    require(new["DEMO_GLOBAL_FUND"] - old["DEMO_GLOBAL_FUND"] == -15
-            and new["DEMO_TECH_FUND"] - old["DEMO_TECH_FUND"] == 15,
-            "Proposal must be a 15-percentage-point internal shift")
-
-    global_fund = constituents["DEMO_GLOBAL_FUND"]
-    tech_fund = constituents["DEMO_TECH_FUND"]
-    common = global_fund.keys() & tech_fund.keys()
-    overlap = sum((min(global_fund[c], tech_fund[c]) for c in common), ZERO)
-    blend_common = sum((global_fund[c] + tech_fund[c] for c in common), ZERO) / 2
-    current_common = sum((current[c] for c in common), ZERO)
-    proposed_common = sum((proposed[c] for c in common), ZERO)
-    require(overlap == 70 and blend_common == 75, "Fund metrics changed")
-    require(current_common == 66 and proposed_common == Decimal("67.5"),
-            "Shared-company whole-portfolio exposure changed")
-
-    # These thresholds belong to this fictional investor, not a recommended policy.
-    ceiling = Decimal(40)
-    breaches = {c: weight - ceiling for c, weight in proposed.items()
-                if weight > ceiling}
-    require(breaches == {"DEMO_A": Decimal("0.5")}, "Expected breach changed")
-    require(max(current.values()) <= ceiling, "Current portfolio breaches ceiling")
-    require(60 <= HUNDRED - cash <= 90 and 60 <= HUNDRED - proposed_cash <= 90,
-            "Equity range changed")
-    print(json.dumps({
-        "status": "worked_arithmetic_verified",
-        "whole_portfolio_current_pct": current,
-        "whole_portfolio_proposed_pct": proposed,
-        "cash_pct": cash,
-        "fund_pair_matched_minimum_overlap_pct": overlap,
-        "equal_blend_common_name_pct": blend_common,
-        "shared_company_current_pct": current_common,
-        "shared_company_proposed_pct": proposed_common,
-        "proposed_company_breach_percentage_points": breaches,
-        "model_calls": 0,
-    }, default=str, indent=2))
+def serializable(value):
+    if isinstance(value, Decimal):
+        return str(value)
+    raise TypeError(type(value))
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    print(json.dumps(compare(), default=serializable, indent=2))

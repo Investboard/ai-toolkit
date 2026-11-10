@@ -1,4 +1,13 @@
-as_of,base_currency,holding_id,holding_name,holding_type,portfolio_weight_pct,data_kind
-2026-01-31,EUR,DEMO_GLOBAL_FUND,Synthetic Global Fund,fund,45,synthetic
-2026-01-31,EUR,DEMO_TECH_FUND,Synthetic Technology Fund,fund,45,synthetic
-2026-01-31,EUR,DEMO_CASH,Synthetic Cash,cash,10,synthetic
+route_id,holding_id,change_eur
+new_cash_buy_only,IWDA.AS,85.09
+new_cash_buy_only,EXS1.DE,144.29
+new_cash_buy_only,CASH_EUR,170.62
+existing_cash_only,IWDA.AS,0
+existing_cash_only,EXS1.DE,64.29
+existing_cash_only,CASH_EUR,-64.29
+sell_and_buy,IWDA.AS,-194.91
+sell_and_buy,EXS1.DE,64.29
+sell_and_buy,CASH_EUR,130.62
+hybrid,IWDA.AS,-124.91
+hybrid,EXS1.DE,84.29
+hybrid,CASH_EUR,140.62

@@ -1,0 +1,5 @@
+holding_id,isin,currency,valuation_date,observed_series_value,return_basis,source,retrieved_at,dataset_stamp,data_kind
+EXS1.DE,DE0005933931,EUR,2025-11-10,197.000000,total_return,FMP via Investboard stored benchmark series,2026-11-10 03:28:49.961+00,4be2a6f88f497ba3914443f2438afed542e1206ad885a8721a87c022d6b4175d,observed_market_series
+EXS1.DE,DE0005933931,EUR,2026-11-09,216.400000,total_return,FMP via Investboard stored benchmark series,2026-11-10 03:28:49.961+00,4be2a6f88f497ba3914443f2438afed542e1206ad885a8721a87c022d6b4175d,observed_market_series
+IWDA.AS,IE00B4L5Y983,EUR,2025-11-10,110.940000,total_return,FMP via Investboard stored benchmark series,2026-11-10 03:28:49.136+00,408a9d571fef91a836e9147e430ea320edcf4fa87e4665f6b944a85a5a814956,observed_market_series
+IWDA.AS,IE00B4L5Y983,EUR,2026-11-09,128.520000,total_return,FMP via Investboard stored benchmark series,2026-11-10 03:28:49.136+00,408a9d571fef91a836e9147e430ea320edcf4fa87e4665f6b944a85a5a814956,observed_market_series

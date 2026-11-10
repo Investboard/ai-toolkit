@@ -1,205 +1,156 @@
-# Two funds. 39% in one company.
+# A rebalance review, starting with new cash
 
-In this fictional portfolio, two funds put 39% in the same company. Changing
-their weights raises that share to 40.5%, above the investor's own 40% limit.
-Follow four copyable prompts to uncover the overlap, check the proposal and
-reflect on an explicitly stated decision. Each worked number can be checked.
-This is a teaching example, not a transcript of an AI run or a recommendation
-to invest. The deliberately high company limit is fictional.
+Your portfolio has drifted. Before deciding whether to sell, compare what
+available cash can achieve and how the other routes fit your own plan.
 
-The question: **Would a different fund mix stay within the investor's own
-company limit?**
+This walkthrough turns one question into a comparison you can check:
+**“Can I move back toward my targets by buying underweights?”** The output is a
+before/after table for four routes and a draft decision note with the investor's
+reason. It does not execute trades or predict which route will perform best.
 
-## Before you start
+## The case
 
-Install [Portfolio Intelligence, Investment Strategy Check and Investment
-Decision-Making](../../README.md#four-skills-for-better-investment-decisions)
-using your assistant's [installation route](../../README.md#install-in-chatgpt-or-codex).
-Use a new conversation. Your provider's account requirements, quota and fees
-still apply. No Investboard account or subscription is needed for the demo.
+The sample investor starts with €7,000 in MSCI World, €2,000 in DAX and €1,000
+cash on November 10, 2025. Their chosen targets are 70/20/10, each with a ±2
+percentage-point band, and portfolio cash must stay at or above €800. At the annual
+review, €400 of new investable cash is available outside the portfolio. They
+prefer buying underweights when feasible.
 
-Save the files below using GitHub's raw-file download control. Attach them at
-the step where they are needed. These are assistant attachments, not import
-templates. All identifiers, dates, weights, rules and decisions are fictional.
+Those are **illustrative user inputs, not a recommended allocation**. Fund
+identities and four dated total-return-series observations are real data from
+Investboard's existing FMP cache, through November 9, 2026. The observed series
+values model sleeve growth; they are not executable quotes or a customer's
+positions. Both listings use EUR. Cash interest is assumed zero and no interim
+flows are modeled. See the [exact sources and calculations](README.md).
 
-| File | Use it for |
+## Try it
+
+Install Portfolio Intelligence, Investment Strategy Check and Investment
+Decision-Making using the [AI-agent installation options](../../README.md#install-in-chatgpt-or-codex)
+or [individual skills](../../README.md#install-individual-skills). Start a new
+chat. No Investboard account or broker connection is needed. Your AI provider's
+account requirements, quota and fees apply. These are chat attachments, not
+import templates. Existing account connections need no changes.
+
+Attach files only at the indicated stage:
+
+| File | Stage and purpose |
 | --- | --- |
-| [sample-portfolio.csv](sample-portfolio.csv) | Current 60% Global Fund, 30% Technology Fund, 10% cash |
-| [sample-fund-holdings.csv](sample-fund-holdings.csv) | Companies inside each fund |
-| [sample-strategy.md](sample-strategy.md) | The fictional investor's rules and proposed internal shift |
-| [sample-proposal.csv](sample-proposal.csv) | Proposed 45% / 45% / 10% mix |
-| [sample-decision-review.md](sample-decision-review.md) | An explicit deferred choice and later observations |
+| [sample-portfolio.csv](sample-portfolio.csv) | 1: starting notionals and targets |
+| [sample-market-data.csv](sample-market-data.csv) | 1: four sourced, dated total-return-series observations |
+| [sample-plan.json](sample-plan.json) | 1: bands, cash reserve, external budgets and preference |
+| [provenance.json](provenance.json) | 1: source identities, dataset stamps and limitations |
+| [sample-proposal.csv](sample-proposal.csv) | 2: four candidate routes, with signed EUR changes |
+| [sample-strategy.md](sample-strategy.md) | 3: the same investor preferences in prose |
+| [sample-decision-review.md](sample-decision-review.md) | 4: an explicitly supplied illustrative choice |
 
-Keep this file-only throughout. In each prompt, ask the assistant to use the
-attachments without account tools, browsing, imports or saved records. An
-installed MCP connection can stay as it is; you do not need to reconnect or
-change permissions. If your assistant cannot read CSV attachments, use a client
-that supports files or paste their full contents into the conversation.
+The worked answers below are authored reference calculations, not a transcript
+or evidence that a model has passed these prompts.
 
-## 1. Start with what you own
+## 1. Understand the drift
 
-Attach the portfolio and fund-holdings CSVs. Send:
-
-```text
-Use Portfolio Intelligence. Explain this fictional portfolio using only the
-two attached CSVs. Show each company's exposure through each fund and as a
-percentage of the whole portfolio. Keep cash separate. State the snapshot
-date, currency and constituent coverage. Do not browse, call account tools,
-import data or save records. Do not infer returns or historical correlations.
-```
-
-**Check the answer:** January 31, 2026; EUR base currency; weights rather than
-money values. Both funds have 100% constituent coverage within this synthetic
-dataset. Company A is 39%, B 27%, C 12%, D 6%, E 6%, and cash 10%.
-
-Company A's exposure is `60% × 40% + 30% × 50% = 39%` of the whole portfolio.
-See the [complete contribution table](README.md#check-your-result).
-
-## 2. Look beneath the fund names
-
-Keep the same two attachments. Send:
+Use Portfolio Intelligence with the first four files:
 
 ```text
-Use Portfolio Intelligence with the same files only. Which companies appear
-in both funds? Distinguish their combined share of my whole portfolio from
-the two funds' weighted overlap coefficient. Show each calculation and its
-denominator. If you discuss an equal-weight blend, calculate that separately.
-Do not call account tools, browse, save anything or infer correlations.
+Explain this sample portfolio at its annual review using only the supplied
+files. Value each fund sleeve from its starting notional and the observed
+same-listing total-return-series ratio, rounding modeled values to EUR cents.
+Show current values, weights and drift from the investor's targets. Keep cash
+separate. Distinguish observed data from illustrative user inputs. Identify
+whether the unchanged baseline still satisfies the bands and cash reserve.
+These series values are not executable quotes. Do not infer company-level
+diversification, browse, call account tools, import or save anything.
 ```
 
-**Check the answer:** A and B appear in both funds. Together they make up
-**66% of the whole portfolio**. The funds’ matched-weight overlap is **70%**:
-`min(40,50) + min(30,30)`. These answer different questions: your exposure to
-shared companies, and how much constituent weight can be matched between funds.
+**Check:** the modeled total is €11,306.20: MSCI World €8,109.25, DAX €2,196.95
+and cash €1,000.00. Current weights are approximately 71.72/19.43/8.84%.
+All three remain inside their bands and cash is above €800. The annual review
+is a reason to examine options, not an instruction to trade or wait.
 
-Continue to the strategy comparison below. The extra denominator checks here
-are useful if you want to inspect the arithmetic more closely.
+## 2. Compare four routes
 
-<details>
-<summary>Optional: why 66%, 70% and 75% are different</summary>
-
-Three different questions produce three different numbers:
-
-| Question | Result | Calculation and basis |
-| --- | ---: | --- |
-| How much of the current portfolio is in A and B? | 66% | `39 + 27`, whole portfolio including cash |
-| What weight can be matched company by company between the funds? | 70% | `min(40,50) + min(30,30)`, each fund normalized separately |
-| What share of an equal-weight blend would be in common names? | 75% | `((40 + 30) + (50 + 30)) / 2`, hypothetical 50/50 fund blend, excluding cash |
-
-If the assistant introduces a non-cash denominator, A+B is `66 / 90 = 73.33%`
-of the current non-cash portion. It is not 66% of that portion. Fund overlap
-does not establish historical return correlation or future diversification.
-
-</details>
-
-## 3. Compare a proposal with the investor's strategy
-
-Now attach the strategy and proposal, keeping both original CSVs available.
-Send:
+Now attach sample-proposal.csv. The contribution amount for each route is in
+sample-plan.json; do not sum it once per proposal row.
 
 ```text
-Use Investment Strategy Check. Compare sample-proposal.csv with the current
-portfolio and the rules in sample-strategy.md, using the supplied constituent
-weights. This moves 15 percentage points from Global Fund to Technology Fund,
-with no new money and no cash change. Show current and proposed exposures and
-each rule's result. Separate a fund composition metric from my portfolio mix.
-Use these files only: no account tools, browsing, saved check or trade. Explain
-the trade-offs and missing evidence; do not choose an investment for me.
+Use Portfolio Intelligence to compare the four proposal routes with the
+unchanged baseline. Start with buying underweights using the EUR 400 new
+contribution. Also show existing-cash purchases, sell-and-buy and the EUR 100
+hybrid. For each route show new external cash, purchases, sales, retained cash,
+final portfolio value, final weights and remaining drift. Include incoming
+cash in the denominator BEFORE identifying underweights; do not count it twice.
+Explain why cash-only purchases do not fully restore targets. Preserve the
+cash reserve. Do not treat contributions as returns, assume zero fees or taxes,
+forecast future prices or derive executable share quantities. Files only;
+no browsing, account tools, trades or saved records.
 ```
 
-**Check the answer:**
+**Check:** the preferred new-cash candidate buys €85.09 MSCI World and €144.29
+DAX, retaining €170.62 in cash. No position is sold. The new total is €11,706.20
+and the result is 70/20/10 to cent rounding. Both funds are underweight after
+the contribution enters the denominator, even though MSCI World was previously
+overweight. The contribution is not an investment gain.
 
-| Whole-portfolio exposure | Current | Proposed | Change in percentage points |
-| --- | ---: | ---: | ---: |
-| Company A | 39% | 40.5% | +1.5 |
-| Company B | 27% | 27% | 0 |
-| Company C | 12% | 9% | -3 |
-| Company D | 6% | 4.5% | -1.5 |
-| Company E | 6% | 9% | +3 |
-| Cash | 10% | 10% | 0 |
-| Total | 100% | 100% | 0 |
+Existing cash buys €64.29 DAX, leaving €935.71 cash and a partial result of
+approximately 71.72/20.00/8.28%. Sell-and-buy sells €194.91 MSCI World; the
+€100 hybrid sells €124.91. Both fund the corresponding DAX purchase and cash
+top-up, reaching targets gross. See the [full comparison table](README.md#compare-four-ways-to-proceed).
 
-The proposal gives A `45% × 40% + 45% × 50% = 40.5%` of the whole portfolio.
+## 3. Check feasibility against the plan
 
-| Fictional investor's rule | Current | Proposed |
-| --- | --- | --- |
-| Equities between 60% and 90%, inclusive | 90%: within range | 90%: within range |
-| Cash at least 10% | 10%: at floor | 10%: at floor |
-| Each underlying company at most 40% | Largest is A, 39%: within limit | A, 40.5%: exceeds ceiling by 0.5 percentage points |
-
-The fund-pair overlap coefficient stays **70%**, because the underlying fund
-compositions have not changed. A+B's combined portfolio exposure rises from
-**66% to 67.5%**. A larger Technology Fund position does not reduce this
-portfolio's largest company exposure. This is a comparison against supplied
-rules, not a saved compliance verdict or a complete assessment of suitability.
-
-There are no prices, fees, taxes, liquidity facts, return series or forecasts.
-The files cannot establish whether either mix would perform better. The 40%
-ceiling belongs only to this fictional exercise and is not a suggested limit.
-
-## 4. Keep the reason, then reflect on it
-
-Attach the decision-review file **only now**. Its stated choice and later
-observation are scenario inputs, not permission to write account records.
-Send:
+Attach sample-strategy.md and ask Investment Strategy Check:
 
 ```text
-Use Investment Decision-Making with sample-decision-review.md and the earlier
-files only. First draft a short record of the investor's explicitly deferred
-February 1 choice, its reason and what they said they need before reconsidering.
-Then reflect as of February 14 using only the supplied observation. Distinguish
-the original January 31 snapshot, the stated choice, missing new evidence and
-the investor's next review date. Do not infer a new choice, current holdings,
-execution or performance. No account tools, saved record, overwrite or reminder.
-Label both outputs as fictional scenario drafts, not an account history or an
-observed result.
+Check every route against the supplied target bands, EUR 800 cash floor,
+external-cash availability and buy-only preference. Show exact-target status
+separately from within-band status. Explain that the unchanged baseline is
+already within the bands. Treat the new-cash route as preferred only under the
+stated available cash and investor preference, not as a universal best option.
+Show the before-cost minimum new cash for exact buy-only targets. If only
+EUR 100 were available, show the partial buy-only result and remaining drift;
+do not label it fully rebalanced. Fees, spreads, tax inputs, dealing rules and
+execution quotes are missing: do not certify after-cost feasibility or invent
+an investment recommendation. No account tools or saved check.
 ```
 
-**A useful text record would contain:**
+**Check:** all four reference routes satisfy the reserve and bands gross.
+Only the existing-cash route misses exact targets. The conservative lower bound
+for exact unrounded buy-only targets is €278.45 before costs; costs could change
+the required amount. With €100, buying only leaves approximately 71.10/20.00/8.90%
+and is partial, although still within the bands. No future contribution date
+or market outcome is promised.
 
-> **February 1, 2026: deferred.** The 45/45/10 proposal puts Company A at 40.5%
-> of the whole portfolio, exceeding my 40% limit by 0.5 percentage points.
-> Before reconsidering, I want updated holdings and an allocation below or at
-> that ceiling. This is my stated choice, not a trade or a saved account record.
+## 4. Capture the investor's choice and reasoning
 
-**A useful reflection would contain:**
+Only now attach sample-decision-review.md. It explicitly supplies a choice for
+the exercise, so the AI does not have to invent one:
 
-> **February 14, 2026: evidence still missing.** No updated holdings or revised
-> proposal were supplied. The January 31 calculation remains a dated comparison;
-> it does not establish today's holdings. There is no basis to judge subsequent
-> returns or declare the decision successful. No new choice was stated. The
-> investor's next review date is February 28; no reminder has been scheduled.
-
-The rule breach explains the supplied choice. The earlier “revisit” trigger
-alone did not authorize or imply deferral. In a real workflow, an assistant
-should ask for the investor's choice rather than invent one. Saved check
-outcomes are write-once; these text drafts neither create nor replace one.
-
-## What you have at the end
-
-A look-through table, a clearly defined overlap metric, a proposal compared
-with personal rules, and a dated decision reflection. The investor supplies
-the rules and makes the choice; the assistant helps keep the evidence straight.
-
-Try changing a weight and rerunning the arithmetic before asking the assistant
-to explain it. Preserve totals and state any changed assumptions. For your own
-portfolio, replace these files with evidence you choose to share and keep its
-dates and coverage visible. Never paste brokerage passwords into a chat.
-
-To reproduce the sample calculations locally with Python 3 and no dependencies:
-
-```sh
-python3 examples/portfolio-overlap/verify.py
+```text
+Use Investment Decision-Making to draft the investor's explicitly supplied
+choice and a reflection on the available evidence as of November 10, 2026.
+Explain why the investor selected the EUR 400 buy-only candidate, acknowledge
+that doing nothing remains within the bands, and state the missing execution
+and cost information. Label it an illustrative text draft. A selected candidate
+is not an executed trade; no subsequent outcomes were supplied. Do not infer
+a different choice, later returns, a review date or a reminder. No account
+tools, save, overwrite or execution.
 ```
 
-This verifies the files and worked numbers. It does not invoke a model, test
-installed plugin behavior or establish a live account connection.
+**A useful note:** “I chose to review the €400 new-cash candidate because the
+money is available, I prefer to avoid sales, and it restores my targets gross.
+I understand that my current portfolio is still within its bands. I have not
+placed an order. I still need current quotes, broker dealing rules and costs
+before considering implementation. No later investment outcome is known.”
 
-## Try it with the sample portfolio
+The investor makes the choice. The AI helps connect it to the actual evidence
+and stated plan. When real later observations become available, a later review
+can use this reason without rewriting it as a performance success.
+
+## Try the rebalance review
 
 [Choose your AI agent and install the skills](../../README.md#install-in-chatgpt-or-codex),
-then [send the first prompt with the two sample CSVs](#1-start-with-what-you-own)
-in a new chat. No Investboard account or broker connection is needed. Your
-AI provider's account requirements, quota and fees still apply.
+then send the first prompt with the four initial files. For your own review,
+use your actual holdings, strategy and available-cash information. Share only
+what you choose to disclose; never paste brokerage passwords.
 
-[Return to the simple overlap example](README.md)
+[Verify the worked numbers locally](README.md#reproduce-it-locally).

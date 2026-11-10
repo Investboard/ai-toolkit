@@ -1,29 +1,20 @@
-# A fictional decision and later reflection
+# Sample investor's explicit choice — text draft only
 
-Data kind: synthetic teaching example. These statements are supplied scenario
-facts, not the assistant's observations or records retrieved from an account.
+This is an illustrative user-authored choice for the exercise, not a customer
+record, executed order or observed investment outcome.
 
-## Decision stated on February 1, 2026
+On November 10, 2026, I choose the EUR 400 new-cash, buy-only route as the
+candidate I want to review. I have that money available outside this portfolio,
+prefer to avoid sales when feasible, and want to restore the stated targets.
+I understand that doing nothing also remains within my tolerance bands.
 
-My choice is deferred. I am not proceeding with the 45/45/10 proposal now.
-The sample calculation puts Company A at 40.5% of the whole portfolio, above
-my 40% ceiling. Before reconsidering, I want updated holdings and an allocation
-that does not exceed that ceiling. This prerequisite is my explicit choice,
-not something implied by my earlier review trigger.
+The gross comparison allocates EUR 85.09 to the MSCI World sleeve, EUR 144.29
+to the DAX sleeve and EUR 170.62 to portfolio cash. I have not placed an order.
+Before any implementation I need current executable quotes, broker dealing
+rules and costs; this calculation does not establish after-cost feasibility.
 
-Draft this decision as text for me to keep. Do not create a saved check, call
-record_decision or claim that anything was saved or executed. The statement
-does not establish that I placed, canceled or filled an order.
-
-## Observation supplied on February 14, 2026
-
-I have not supplied updated holdings or a revised proposal. The original
-files are still dated January 31. I have supplied no observed transactions,
-prices, returns, costs or subsequent performance.
-
-Please reflect on whether the evidence needed to reconsider my choice is
-present. Do not infer that the original holdings remained unchanged in the
-real world, or that waiting made or lost money. I have not stated a new choice.
-
-My next review date is February 28, 2026. This is an example date in a text
-record, not a request to schedule a reminder. Any new decision is mine to state.
+Reflect only on this choice and the supplied evidence as of November 10. No
+later market observations, returns, transactions or revised choice are supplied.
+Do not describe the candidate as executed, judge its later performance, invent a
+review date or set a reminder. Draft a note I can review; do not save or overwrite
+an account record. A plan review alone would not tell you which route I chose.
