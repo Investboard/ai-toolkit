@@ -1,12 +1,14 @@
-# Two funds. One underlying portfolio. A decision to revisit.
+# Two funds. 39% in one company.
 
-Follow a fictional investor from a portfolio question to a strategy comparison
-and a later reflection. Each step has a prompt you can copy and a worked result
-you can check. This is a reproducible teaching example, not a transcript of an
-AI run or a recommendation to invest.
+In this fictional portfolio, two funds put 39% in the same company. Changing
+their weights raises that share to 40.5%, above the investor's own 40% limit.
+Follow four copyable prompts to uncover the overlap, check the proposal and
+reflect on an explicitly stated decision. Each worked number can be checked.
+This is a teaching example, not a transcript of an AI run or a recommendation
+to invest. The deliberately high company limit is fictional.
 
-The question: **Would changing the fund mix improve diversification under this
-investor's own rules?**
+The question: **Would a different fund mix stay within the investor's own
+company limit?**
 
 ## Before you start
 
@@ -193,5 +195,11 @@ python3 examples/portfolio-overlap/verify.py
 This verifies the files and worked numbers. It does not invoke a model, test
 installed plugin behavior or establish a live account connection.
 
-[Explore the toolkit and installation options](../../README.md) ·
+## Try it with the sample portfolio
+
+[Choose your AI agent and install the skills](../../README.md#install-in-chatgpt-or-codex),
+then [send the first prompt with the two sample CSVs](#1-start-with-what-you-own)
+in a new chat. No Investboard account or broker connection is needed. Your
+AI provider's account requirements, quota and fees still apply.
+
 [Return to the simple overlap example](README.md)

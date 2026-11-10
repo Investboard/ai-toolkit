@@ -24,12 +24,14 @@ Use a fictional portfolio to see how two funds can hold the same companies. No I
 
 If you find the toolkit useful, [give it a star on GitHub](https://github.com/Investboard/ai-toolkit).
 
-### Follow the question through to a decision
+### See what a change in fund weights can hide
 
 [Try the four-step demo: portfolio → overlap → strategy → reflection](examples/portfolio-overlap/walkthrough.md).
-Use the same fictional portfolio, compare a proposed change against a supplied
-strategy, and review a stated decision later. Includes copyable prompts, sample
-files and worked results. No account connection is needed.
+The same fictional company rises from 39% to 40.5% of the portfolio, above the
+sample investor's own limit, while fund overlap stays at 70%. Use four copyable
+prompts to uncover the exposure, compare the proposal and reflect on a stated
+decision. Sample files and worked results are included; no account connection
+is needed.
 
 ## Four skills for better investment decisions
 
