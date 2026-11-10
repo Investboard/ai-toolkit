@@ -96,6 +96,11 @@ approximately 71.72/20.00/8.28%. Sell-and-buy sells €194.91 MSCI World; the
 €100 hybrid sells €124.91. Both fund the corresponding DAX purchase and cash
 top-up, reaching targets gross. See the [full comparison table](README.md#compare-four-ways-to-proceed).
 
+The cash-only route fixes the DAX gap while moving cash farther below target.
+Its maximum drift is still about 1.72 percentage points, so it does not improve
+that overall measure. Buying an underweight sleeve is not enough on its own to
+claim that the entire portfolio is better balanced.
+
 ## 3. Check feasibility against the plan
 
 Attach sample-strategy.md and ask Investment Strategy Check:

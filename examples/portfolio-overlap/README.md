@@ -55,6 +55,9 @@ in portfolio cash; it is not another purchase.
 All four gross comparisons preserve the reserve and stay within the sample
 bands. Existing-cash purchases leave €935.71 cash and remaining drift; they do
 not fully restore targets. The baseline remains a fifth valid comparator.
+The cash-only purchase fills the DAX gap by moving cash farther below its own
+target. Maximum drift remains about 1.72 percentage points, essentially the
+same as the baseline; this route does not improve that overall measure.
 The preferred route is conditional on this investor's available cash and goals,
 not a universal claim that one method is always best.
 

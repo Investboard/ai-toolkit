@@ -111,6 +111,7 @@ def summarize(current, target, incoming, delta, plan):
         changes_eur=delta,
         after_values_eur=after,
         after_weights_pct=weights,
+        max_abs_drift_pp=max(abs(weights[k] - target[k] * HUNDRED) for k in target),
         gross_sales_eur=sum(-v for k, v in delta.items() if k != CASH and v < 0),
         gross_buys_eur=sum(v for k, v in delta.items() if k != CASH and v > 0),
         reserve_ok=after[CASH] >= Decimal(plan['minimum_portfolio_cash_eur']),

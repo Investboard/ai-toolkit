@@ -49,6 +49,7 @@ class RebalanceDemoTests(unittest.TestCase):
         self.assertTrue(route['reserve_ok'])
         self.assertTrue(route['within_bands'])
         self.assertFalse(route['at_target_to_cent'])
+        self.assertLess(abs(route['max_abs_drift_pp'] - self.result['baseline']['max_abs_drift_pp']), D('0.001'))
 
     def test_hybrid_reduces_sales_without_calling_new_cash_a_return(self):
         hybrid = self.result['routes']['hybrid']
