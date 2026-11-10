@@ -12,7 +12,7 @@ whether to sell?**
 [Try the four-step rebalance demo](examples/portfolio-overlap/walkthrough.md#try-it).
 Use observed market series for MSCI World and DAX with an explicitly illustrative
 investor plan. Compare **buying underweights with new cash first**, then a smaller
-contribution, sell-and-buy and a cash-plus-sale hybrid. See the money required,
+contribution, selling equities and a cash-plus-sale hybrid. See the money required,
 class weights and remaining drift, then draft a decision note.
 
 [Preview the connected rebalance workflow](examples/portfolio-overlap/connected-walkthrough.md):

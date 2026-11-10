@@ -46,7 +46,7 @@ The example does not choose which equity holding to buy or sell.
 | Unchanged baseline | €0.00 | €0.00 | €0.00 | 91.16/8.84%; within bands |
 | **€400, no sales** | €400.00 | Buy €229.38 | +€170.62 | 90/10 to cent rounding |
 | €100, no sales | €100.00 | €0.00 | +€100.00 | 90.36/9.64%; partial |
-| Sell and buy, no new money | €0.00 | Sell €130.62 | +€130.62 | 90/10 to cent rounding |
+| Sell equities, no new money | €0.00 | Sell €130.62 | +€130.62 | 90/10 to cent rounding |
 | €100 hybrid | €100.00 | Sell €40.62 | +€140.62 | 90/10 to cent rounding |
 
 The €400 route is preferred under this investor's stated available cash and
