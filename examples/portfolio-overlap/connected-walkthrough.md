@@ -1,16 +1,19 @@
 # Rebalance with new money before selling
 
-**Connected workflow preview.** Prepared ahead of native rebalance MCP
-integration. The current connector cannot generate this comparison yet.
-[Try the file-only version now](walkthrough.md#try-it).
+**Connected workflow.** The hosted MCP provides `preview_rebalance`, which
+compares alternatives using your authorized portfolio and signed mandate.
+Account permissions, portfolio sharing and the applicable plan are required.
+Your assistant must expose the new tool after its directory checks finish.
+[Try the file-only version](walkthrough.md#try-it) without account access.
 
-The intended experience reads your own permitted holdings and mandate, uses
+The workflow reads your own permitted holdings and mandate, uses
 Investboard's deterministic class-level calculation, explains alternatives
 against your rules and drafts the reason you explicitly choose. Reuse an
 existing connection; no new permissions or connection are authorized by this
 document. [Choose your assistant](https://investboard.com/product/ai-toolkit#install).
 
-The worked case is illustrative, not a customer account or a connected transcript.
+The worked case below is illustrative, not a customer account or a connected transcript.
+Your own comparison must use the values the tools return, not these sample answers.
 Both sample funds are equities. The 90/10 equity/cash targets contain no separate
 MSCI World or DAX target. [Inspect the sourced comparison](README.md#compare-four-ways-to-proceed).
 
@@ -21,7 +24,7 @@ MSCI World or DAX target. [Inspect the sourced comparison](README.md#compare-fou
 
 ## 2. Compare new money with alternatives
 
-> I have €400 of new investable money and prefer buying underweighted classes before selling. Use Investboard's rebalance comparison on the same snapshot. Compare unchanged, €400 without sales, €100 without sales, no-contribution rebalancing and a €100 hybrid. Show class-level changes, cash, weights, drift and cost/tax coverage. Do not save. If the comparison tool is unavailable, stop and say so.
+> I have €400 of new investable money and prefer buying underweighted classes before selling. Use preview_rebalance with contribution 400, currency EUR and priority minimize_sales. Also compare a smaller €100 contribution and no contribution, using contribution 100 and 0 in separate comparisons. Explain the returned alternatives, including keeping the portfolio unchanged, using new money without sales and any alternatives involving sales. Keep the same portfolio evidence across the comparisons; restart if it changes. Show class-level changes, cash, weights, drift, feasibility and cost/tax coverage from the results. Read further pages when rows are omitted. Do not save a check or plan. If the tool is unavailable, stop and say so.
 
 ## 3. Check what each route achieves
 
