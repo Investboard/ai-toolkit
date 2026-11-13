@@ -15,11 +15,12 @@ investor plan. Compare **buying underweights with new cash first**, then a small
 contribution, selling equities and a cash-plus-sale hybrid. See the money required,
 class weights and remaining drift, then draft a decision note.
 
-[Preview the connected rebalance workflow](examples/portfolio-overlap/connected-walkthrough.md):
+[Try the connected rebalance workflow](examples/portfolio-overlap/connected-walkthrough.md):
 read your portfolio and mandate, compare options using Investboard's native
-calculation, and draft your reasoning. This account-based comparison is prepared
-ahead of its MCP integration; it is not available through the current connector.
-The supplied-file demo below works today.
+calculation, and draft your reasoning. The hosted MCP now provides
+`preview_rebalance` for this comparison. It requires authorized account access
+and the applicable plan; your assistant must expose the new tool. The
+supplied-file demo works independently.
 
 1. **Install Portfolio Intelligence** using the [AI-agent installation options](#install-in-chatgpt-or-codex) or [individual skills](#install-individual-skills). The full walkthrough also uses Investment Strategy Check and Investment Decision-Making.
 2. **Save and attach the four starting files** from the [walkthrough](examples/portfolio-overlap/walkthrough.md#try-it), then copy its first prompt into a new chat.
@@ -78,6 +79,15 @@ For Claude chat, download an [individual skill ZIP](https://github.com/Investboa
 
 The repository also includes a portable Agent Plugins manifest and a Codex marketplace catalog. Follow the [installation guide](https://investboard.com/product/ai-toolkit#install) for your client. A client must support the relevant skill or plugin format; account and workspace requirements vary by provider.
 
+## Analyze holdings without an account
+
+The same MCP endpoint also provides `analyze_holdings` and
+`stress_test_holdings` for holdings you supply in the conversation. These two
+tools need no Investboard sign-in and read or save nothing in an account.
+Supply your actual ISINs, weights or values and currency; missing reference data
+is reported as partial or unresolved. Historical stress results replay the past,
+not a forecast. Your assistant provider's requirements and usage limits apply.
+
 ## Connect your Investboard account
 
 All four skills can work with files you supply without an Investboard subscription.
@@ -110,10 +120,26 @@ Start with: “Read my Investboard policy and explain its date and rules. Do not
 | `check_action`, `record_decision` | Save a hypothetical check and record an outcome you explicitly state. |
 | `get_reflection_history`, `get_own_record`, `get_journal` | Retrieve permitted checks, theses and journal entries. |
 | `get_portfolio_holdings`, `get_portfolio_analysis`, `get_portfolio_correlations` | Read holdings, fund exposures and historical portfolio analytics. |
+| `get_performance_explanation`, `preview_rebalance`, `get_decision_outcomes` | Explain whole-portfolio performance, compare contribution and sale alternatives, and revisit recorded decision outcomes. The comparison saves no check or plan. |
+| `get_review_changes`, `prepare_review`, `get_prepared_review`, `get_approved_review` | Read changes since a review, prepare the investor's stated reasoning for approval in Investboard, and retrieve prepared or approved reviews. Preparing a review does not approve it. |
+| `list_stress_scenarios`, `start_stress_test`, `get_stress_test` | Replay a historical crisis over today's holdings. Starting a run saves it in stress-test history; it changes no holdings. |
+| `prepare_portfolio_import`, `get_portfolio_import` | Stage supplied holdings and read the receipt. The investor must confirm the import in Investboard before anything enters their portfolio. |
+
+The hosted tool catalog updates independently of the four packaged skills.
+Published directories may expose new tools only after their checks finish. If a
+tool is missing, follow your assistant's refresh flow and start a new
+conversation; keep your existing connection.
 
 The full connected workflow requires **Investboard Premium**. Active Free accounts support one connection and policy, status, check and decision-recording tools. Premium adds unlimited connections, supported check history, thesis and journal reads, and portfolio analytics. Your assistant provider has separate requirements.
 
-Checks and stated decisions are saved in your account. The tools do not submit orders, transfer money, change your mandate, or edit theses and journal reviews. Portfolio reads can include holding values when authorized; they do not return brokerage credentials or account numbers. Keep evidence dates, currencies and coverage with any interpretation. Historical correlations do not guarantee future diversification.
+Checks and stated decisions are saved in your account. Imports remain pending
+until you confirm them; prepared portfolio reviews require your approval in
+Investboard. Account stress tests create history records. The tools do not
+submit orders, transfer money, change your mandate, or edit theses and journal
+reviews. Portfolio reads can include holding values when authorized; they do not
+return brokerage credentials or account numbers. Keep evidence dates, currencies
+and coverage with any interpretation. Historical correlations do not guarantee
+future diversification.
 
 Manage permissions, portfolio sharing and revocation in Investboard’s assistant settings. Revocation stops future access; it does not recall information already shared.
 

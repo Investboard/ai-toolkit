@@ -3,10 +3,10 @@
 **Question:** “Can my next contribution restore my asset-class targets without
 selling, and how do the alternatives compare?”
 
-[Try the four-step file demo](walkthrough.md#try-it), or read the [connected
-workflow preview](connected-walkthrough.md). The latter is prepared ahead of
-the native rebalance MCP integration; it is not available through the current
-connector. The file-only exercise works independently.
+[Try the four-step file demo](walkthrough.md#try-it), or use the [connected
+workflow](connected-walkthrough.md) with the hosted `preview_rebalance` tool.
+The connected workflow needs permitted account access, the applicable plan and
+an assistant that exposes the new tool. The file-only exercise works independently.
 
 ## Real observations, illustrative investor inputs
 

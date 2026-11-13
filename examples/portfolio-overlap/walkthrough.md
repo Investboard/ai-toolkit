@@ -60,5 +60,5 @@ later performance, another choice or a reminder. Do not save or overwrite record
 
 [Choose your AI agent](https://investboard.com/product/ai-toolkit#install), then
 use your own holdings, mandate and available-cash inputs. Share only information
-you choose; never share brokerage passwords. For the intended connected
-experience, see the [preview](connected-walkthrough.md).
+you choose; never share brokerage passwords. For an account-based comparison
+with `preview_rebalance`, see the [connected workflow](connected-walkthrough.md).
