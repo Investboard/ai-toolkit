@@ -1,0 +1,8 @@
+as_of,fund_id,company_id,company_name,fund_weight_pct,data_kind
+2026-01-31,DEMO_GLOBAL_FUND,DEMO_A,Synthetic Company A,40,synthetic
+2026-01-31,DEMO_GLOBAL_FUND,DEMO_B,Synthetic Company B,30,synthetic
+2026-01-31,DEMO_GLOBAL_FUND,DEMO_C,Synthetic Company C,20,synthetic
+2026-01-31,DEMO_GLOBAL_FUND,DEMO_D,Synthetic Company D,10,synthetic
+2026-01-31,DEMO_TECH_FUND,DEMO_A,Synthetic Company A,50,synthetic
+2026-01-31,DEMO_TECH_FUND,DEMO_B,Synthetic Company B,30,synthetic
+2026-01-31,DEMO_TECH_FUND,DEMO_E,Synthetic Company E,20,synthetic

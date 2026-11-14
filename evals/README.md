@@ -8,12 +8,21 @@ The harness **only reads saved traces**. It contains no model client, network
 request, OAuth flow or agent execution mode. Running it makes no model calls.
 It does not change an installed plugin or any account connection.
 
+## Stable synthetic inputs
+
+All corpus attachments live under evals/fixtures/. The portfolio overlap cases
+use the [dedicated synthetic portfolio and fund weights](fixtures/portfolio-overlap/README.md),
+not the separate real-market rebalance demo. Changing a marketing example must
+not change the benchmark inputs or introduce provider observations into it.
+Fixture or case changes invalidate the affected case fingerprints; retain old
+captures separately and collect new evidence for a changed case.
+
 ## Local commands
 
 Use Node.js 22.20 or later. No package installation is needed.
 
 ```sh
-node --test evals/harness.test.mjs
+node --test evals/harness.test.mjs evals/capture.test.mjs
 node scripts/eval-skills.mjs validate --output /tmp/investboard-eval-suite.json
 node scripts/eval-skills.mjs grade --output /tmp/investboard-eval-empty.json
 ```
