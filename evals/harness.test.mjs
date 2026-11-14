@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import {
+	cp,
 	mkdir,
 	mkdtemp,
 	readFile,
@@ -72,6 +73,30 @@ test("validates the complete synthetic corpus without grading model behavior", (
 	assert.match(suite.skills_sha256, /^[a-f0-9]{64}$/);
 	assert.equal(new Set(suite.cases.map((c) => c.case_sha256)).size, 24);
 });
+test("the corpus loads without the independently maintained public examples", async () => {
+	const dir = await mkdtemp(path.join(os.tmpdir(), "investboard-fixtures-"));
+	try {
+		await mkdir(path.join(dir, "evals"));
+		await cp(
+			path.join(root, "evals/cases.json"),
+			path.join(dir, "evals/cases.json"),
+		);
+		await cp(path.join(root, "evals/fixtures"), path.join(dir, "evals/fixtures"), {
+			recursive: true,
+		});
+		await cp(
+			path.join(root, "plugins/investboard/skills"),
+			path.join(dir, "plugins/investboard/skills"),
+			{ recursive: true },
+		);
+		const isolated = await loadSuite(dir);
+		assert.equal(isolated.case_count, 24);
+		assert.equal(isolated.suite_sha256, suite.suite_sha256);
+		assert.equal(isolated.skills_sha256, suite.skills_sha256);
+	} finally {
+		await rm(dir, { recursive: true, force: true });
+	}
+});
 test("the complete and partial CSV fixtures support their numerical rubric", async () => {
 	const csv = async (file) => {
 		const [header, ...rows] = (await readFile(path.join(root, file), "utf8"))
@@ -83,15 +108,28 @@ test("the complete and partial CSV fixtures support their numerical rubric", asy
 		);
 	};
 	const positions = await csv(
-		"examples/portfolio-overlap/sample-portfolio.csv",
+		"evals/fixtures/portfolio-overlap/sample-portfolio.csv",
 	);
 	assert.equal(
 		positions.reduce((sum, p) => sum + Number(p.portfolio_weight_pct), 0),
 		100,
 	);
-	for (const [file, expectedUnknown] of [
-		["examples/portfolio-overlap/sample-fund-holdings.csv", 0],
-		["evals/fixtures/partial-fund-holdings.csv", 24],
+	assert.equal(
+		Number(positions.find((p) => p.holding_type === "cash").portfolio_weight_pct),
+		10,
+	);
+	assert.ok(positions.every((p) => p.data_kind === "synthetic"));
+	for (const [file, expectedUnknown, expectedExposure] of [
+		[
+			"evals/fixtures/portfolio-overlap/sample-fund-holdings.csv",
+			0,
+			{ DEMO_A: 39, DEMO_B: 27, DEMO_C: 12, DEMO_D: 6, DEMO_E: 6 },
+		],
+		[
+			"evals/fixtures/partial-fund-holdings.csv",
+			24,
+			{ DEMO_A: 39, DEMO_B: 27 },
+		],
 	]) {
 		const rows = await csv(file),
 			exposure = new Map();
@@ -106,8 +144,7 @@ test("the complete and partial CSV fixtures support their numerical rubric", asy
 			);
 			assert.equal(row.data_kind, "synthetic");
 		}
-		assert.equal(exposure.get("DEMO_A"), 39);
-		assert.equal(exposure.get("DEMO_B"), 27);
+		assert.deepEqual(Object.fromEntries(exposure), expectedExposure);
 		assert.equal(
 			90 - [...exposure.values()].reduce((a, b) => a + b, 0),
 			expectedUnknown,
@@ -127,6 +164,19 @@ test("synthetic grader fixtures cannot count as model passes even with all revie
 	const r = graded(t, c);
 	assert.equal(r.status, "harness_only");
 	assert.equal(r.harness_checks, "pass");
+});
+test("the documented grader example has current fingerprints and zero model passes", async () => {
+	const traces = await readJsonl(
+		path.join(root, "evals/fixtures/grader-only-trace.jsonl"),
+	);
+	assert.equal(traces.length, 1);
+	assert.equal(traces[0].provenance.kind, "synthetic");
+	const report = gradeSuite(suite, traces);
+	const result = resultFor(report, "portfolio-overlap-file-only");
+	assert.equal(result.status, "harness_only");
+	assert.equal(result.harness_checks, "pass");
+	assert.deepEqual(result.failures, []);
+	assert.equal(report.summary.with_skill.pass, 0);
 });
 test("captured traces need every qualitative review", () => {
 	const c = find("portfolio-overlap-file-only"),
