@@ -1,6 +1,6 @@
 {
   "name": "investboard",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Investment strategy, decisions, theses and portfolio intelligence with supplied files or authorized Investboard account context.",
   "contextFileName": "GEMINI.md",
   "mcpServers": {

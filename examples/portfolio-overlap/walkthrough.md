@@ -62,3 +62,10 @@ later performance, another choice or a reminder. Do not save or overwrite record
 use your own holdings, mandate and available-cash inputs. Share only information
 you choose; never share brokerage passwords. For an account-based comparison
 with `preview_rebalance`, see the [connected workflow](connected-walkthrough.md).
+
+## License
+
+Authored example code, instructions and illustrative investor inputs are
+[Apache-2.0](../LICENSE.md). Provider observations are excluded; see
+[third-party data](../THIRD_PARTY_DATA.md). The app, hosted MCP backend and
+Premium data feeds remain proprietary.

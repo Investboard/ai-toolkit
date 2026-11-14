@@ -1,6 +1,7 @@
 ---
 name: investment-thesis
 description: Clarify and revisit the reasoning behind an investment. Explore the investor's assumptions, conviction and expectations, define what would change their mind, and use saved theses or supplied notes to guide reviews. Use for drafting an investment case, recalling a named investment's recorded rationale, defining a falsifier or reviewing a thesis that is due.
+license: Apache-2.0
 ---
 
 # Investment Thesis

@@ -1,6 +1,7 @@
 ---
 name: investment-strategy-check
 description: Assess whether a concrete proposed buy, sell, rebalance, contribution or withdrawal fits the investor's own allocation rules and constraints. Load this skill before assessing the proposal, including when the rules are in a supplied policy file. Supports file-only comparisons without account access or a saved check, as well as authorized live mandate checks. Explain where the proposal supports the plan or creates tension; the investor decides.
+license: Apache-2.0
 ---
 
 # Investment Strategy Check

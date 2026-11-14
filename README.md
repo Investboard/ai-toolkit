@@ -2,6 +2,9 @@
 
 **Second brain for investing**
 
+Four Apache-2.0 skills and reusable authored examples. The hosted app, MCP
+backend and Premium data remain proprietary. [License scope](LICENSE.md).
+
 Use four skills to understand portfolio exposures, review a proposed change against your own rules, work through a decision or clarify an investment thesis. Start with files you supply; connect your Investboard account when you need permitted account data.
 
 ## Try a rebalance review with real market data
@@ -155,6 +158,12 @@ The [offline evaluation harness](evals/README.md) includes 24 synthetic scenario
 
 ## License and help
 
-This distribution is proprietary, as declared in the plugin manifests. Use is subject to the [Investboard terms](https://investboard.com/terms). Public availability does not grant an open-source license.
+The four skills and Investboard-authored examples are **open source under
+Apache-2.0**. You can use, adapt and redistribute them under that license.
+Provider observations in the example are excluded from the grant.
+
+The app, hosted MCP backend, Premium data, plugin wrapper and branding remain
+proprietary. Hosted-service use is subject to the [Investboard terms](https://investboard.com/terms).
+See the [license scope](LICENSE.md) and [example data exclusions](examples/THIRD_PARTY_DATA.md).
 
 [Installation guide](https://investboard.com/product/ai-toolkit#install) · [Help](https://investboard.com/help) · [Privacy](https://investboard.com/privacy) · [Terms](https://investboard.com/terms)

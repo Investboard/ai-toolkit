@@ -31,3 +31,17 @@ schließen Sie die Einrichtung ab. Kehren Sie danach zu Ihrem Assistenten zurüc
 um die Verbindung herzustellen.
 [Free und Premium vergleichen](https://investboard.com/de/preise).
 Portfolioabrufe benötigen zusätzlich Ihre Freigabe und aktiviertes Teilen.
+
+## Open-source skill / Open-Source-Skill
+
+The files in this skill directory are licensed under Apache-2.0; see LICENSE,
+NOTICE and LICENSE.md. This includes commercial use, modification and
+redistribution under the license. Investboard's hosted app, MCP backend,
+Premium market data, customer data and branding are excluded. Service access
+remains subject to the Investboard terms and applicable subscription.
+
+Die Dateien in diesem Skill-Verzeichnis stehen unter Apache-2.0; siehe LICENSE,
+NOTICE und LICENSE.md. Die Lizenz erlaubt auch kommerzielle Nutzung, Änderung
+und Weiterverbreitung zu ihren Bedingungen. Die gehostete App, das MCP-Backend,
+Premium-Marktdaten, Kundendaten und Marken von Investboard sind ausgenommen.
+Für den Dienst gelten weiterhin die Investboard-Bedingungen und der jeweilige Tarif.

@@ -80,3 +80,10 @@ python3 -m unittest discover -s examples/portfolio-overlap -p 'test_*.py'
 The verifier checks source identity, cash conservation, scenario constraints
 and partial progress. It is an independent reference, not a native-MCP or model
 behavior pass. [Continue with the prompts](walkthrough.md#try-it).
+
+## License
+
+Authored example code, instructions and illustrative investor inputs are
+[Apache-2.0](../LICENSE.md). Provider observations are excluded; see
+[third-party data](../THIRD_PARTY_DATA.md). The app, hosted MCP backend and
+Premium data feeds remain proprietary.

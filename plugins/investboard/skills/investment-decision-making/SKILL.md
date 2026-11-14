@@ -1,6 +1,7 @@
 ---
 name: investment-decision-making
 description: Bring structure to investment decisions. Consider the investor's objectives, rules and past experience, work through trade-offs, and record a stated choice for later reflection. Use for comparing investor-proposed alternatives, preparing a decision, reviewing previous checks and journal entries, or working through overdue decision reviews.
+license: Apache-2.0
 ---
 
 # Investment Decision-Making

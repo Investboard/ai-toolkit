@@ -32,5 +32,10 @@
     "No company-level fund constituents; fund-sleeve weights are not disjoint company exposures. MSCI World already includes German companies.",
     "No forecast, after-cost feasibility pass or investment-performance claim.",
     "No account connection, transaction, recorded outcome or reminder is authorized by these files."
-  ]
+  ],
+  "licensing": {
+    "authored_examples": "Apache-2.0; see ../LICENSE.md",
+    "provider_observations": "Excluded from Apache-2.0; see ../THIRD_PARTY_DATA.md",
+    "hosted_app_mcp_backend_premium_data": "Proprietary; not part of the open-source grant"
+  }
 }

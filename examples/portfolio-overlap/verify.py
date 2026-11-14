@@ -1,3 +1,5 @@
+# Copyright 2026 Investboard GmbH
+# SPDX-License-Identifier: Apache-2.0
 """Offline gross rebalance reference; no model, provider or account calls."""
 from pathlib import Path
 from decimal import Decimal, ROUND_HALF_UP, ROUND_CEILING

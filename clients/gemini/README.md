@@ -50,7 +50,7 @@ prepare a self-contained archive with regular files:
 python3 scripts/prepare-client-installers.py --output-dir /tmp/investboard-client-installers
 ```
 
-Extract `investboard-gemini-2.1.2.zip` and install the extracted directory with
+Extract `investboard-gemini-2.1.3.zip` and install the extracted directory with
 `gemini extensions install /absolute/path/to/extracted-directory`.
 The archive has its manifest at the root and all four skills under `skills/`.
 This Gemini archive is separate from the complete plugin and individual skill
@@ -58,9 +58,10 @@ downloads.
 
 ## Updates
 
-Use Gemini's extension update command when an update is available. The source
-and extension are Proprietary; public GitHub availability does not grant an
-open-source license.
+Use Gemini's extension update command when an update is available. The four
+skill directories are Apache-2.0 licensed and carry their LICENSE, NOTICE and
+LICENSE.md. The extension wrapper, app, hosted MCP backend, Premium data and
+branding remain proprietary. See [the license scope](../../LICENSE.md).
 
 [Gemini extension guide](https://geminicli.com/docs/extensions/)
 · [Investboard installation guide](https://investboard.com/product/ai-toolkit#install)
