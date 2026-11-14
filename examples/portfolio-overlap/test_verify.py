@@ -1,3 +1,5 @@
+# Copyright 2026 Investboard GmbH
+# SPDX-License-Identifier: Apache-2.0
 """Financial invariants and refusal cases for the offline demo reference."""
 from decimal import Decimal
 from pathlib import Path

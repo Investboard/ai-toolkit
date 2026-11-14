@@ -1,6 +1,7 @@
 ---
 name: portfolio-intelligence
 description: Understand a portfolio's underlying holdings, fund look-through, overlapping exposures, concentration, diversification and historical correlations. Use for portfolio analysis, interpreting an Investboard report, comparing fund exposures, or explaining these concepts, using authorized analytics or data supplied by the investor.
+license: Apache-2.0
 ---
 
 # Portfolio Intelligence

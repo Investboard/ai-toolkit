@@ -122,9 +122,12 @@ have no live account connection and cannot refresh their supplied evidence.
 Download versions are separate from the published OpenAI plugin version. A newer
 repository commit does not mean its ZIP release is already published.
 
-The package is proprietary, as declared in its manifest. Use is subject to the
-linked Investboard terms. No application source or private review credentials
-belong in this package.
+The four bundled skill directories are open source under Apache-2.0, with
+LICENSE, NOTICE and LICENSE.md in each directory. The surrounding plugin
+manifests, connection configuration and brand assets remain proprietary; see
+[the package license](LICENSE.md). The app, hosted MCP backend, Premium data
+and customer data are excluded. The hosted service remains subject to the
+linked Investboard terms and applicable plan.
 
 [Installation guide](https://investboard.com/product/ai-toolkit#install) ·
 [Help](https://investboard.com/help) ·

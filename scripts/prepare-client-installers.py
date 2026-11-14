@@ -34,14 +34,20 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     (output / "vscode-install-uri.txt").write_text(uri + "\n")
     files = {name: (ROOT / name).read_bytes() for name in (
-        "gemini-extension.json", "GEMINI.md", "LICENSE.md"
+        "gemini-extension.json", "GEMINI.md"
     )}
+    files["LICENSE.md"] = (ROOT / "plugins/investboard/LICENSE.md").read_bytes()
     # Materialize the canonical skills so the archive needs no symbolic links.
     for source in sorted(SKILLS.rglob("*")):
         if source.is_file():
             files["skills/" + source.relative_to(SKILLS).as_posix()] = source.read_bytes()
     assert sum(name.endswith("/SKILL.md") for name in files) == 4
-    assert sum(name.startswith("skills/") for name in files) == 16
+    for skill in SKILLS.iterdir():
+        if not skill.is_dir():
+            continue
+        for member in ("LICENSE", "NOTICE", "LICENSE.md"):
+            assert f"skills/{skill.name}/{member}" in files
+    assert sum(name.startswith("skills/") for name in files) == 28
     target = output / f"investboard-gemini-{version}.zip"
     if target.exists():
         raise FileExistsError("Use a new output directory; do not replace an archive")
