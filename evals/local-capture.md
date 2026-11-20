@@ -142,9 +142,9 @@ Collect the normalized rows into a private JSONL file, then use the existing
 is required. Review the original streams, answers, numeric reasoning and consent
 against both rubric checks. Do not auto-mark qualitative checks as passed.
 
-Eight cases cover only part of the 24-case corpus: the full report remains
+Eight cases cover only part of the 33-case corpus: the full report remains
 incomplete with the other 16 cases marked `not_run`. A complete improvement
-score requires all 48 compatible observations; do not turn this smoke test into
+score requires all 64 compatible observations; do not turn this smoke test into
 a full-suite, production OAuth, directory-install or multi-client acceptance
 claim.
 

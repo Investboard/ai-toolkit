@@ -936,5 +936,753 @@
 				"critical": true
 			}
 		]
+	},
+	{
+		"id": "portfolio-restart-holdings",
+		"skill": "portfolio-intelligence",
+		"prompt": "Read my entire connected look-through list, two rows per request. Include every holding and reconcile the total and the combined value of holdings individually worth less than a cent. Use the latest complete observation if the data changes.",
+		"files": [],
+		"allowed_tools": [
+			"get_portfolio_holdings"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2
+				},
+				"status": "success",
+				"result": {
+					"view": "look_through",
+					"status": "available",
+					"snapshot": {
+						"computedAt": "2025-01-02T00:00:00.000Z",
+						"baseCurrency": "EUR",
+						"valuedTotal": 10000
+					},
+					"items": [
+						{
+							"id": "ticker:OLD",
+							"weight": 0.8,
+							"value": 8000.0
+						},
+						{
+							"id": "ticker:PREVIOUS",
+							"weight": 0.15,
+							"value": 1500.0
+						}
+					],
+					"total": 3,
+					"nextOffset": 2,
+					"omitted": 1
+				}
+			},
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2,
+					"offset": 2,
+					"computed_at": "2025-01-02T00:00:00.000Z"
+				},
+				"status": "success",
+				"result": {
+					"status": "snapshot_changed",
+					"view": "look_through",
+					"snapshot": null,
+					"items": [],
+					"total": null,
+					"nextOffset": null
+				}
+			},
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2
+				},
+				"status": "success",
+				"result": {
+					"view": "look_through",
+					"status": "available",
+					"snapshot": {
+						"computedAt": "2025-01-03T00:00:00.000Z",
+						"baseCurrency": "EUR",
+						"valuedTotal": 10000
+					},
+					"items": [
+						{
+							"id": "ticker:MAIN",
+							"weight": 0.9999992,
+							"value": 9999.992
+						},
+						{
+							"id": "ticker:TINY_A",
+							"weight": 4e-07,
+							"value": 0.004
+						}
+					],
+					"total": 3,
+					"nextOffset": 2,
+					"omitted": 1
+				}
+			},
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2,
+					"offset": 2,
+					"computed_at": "2025-01-03T00:00:00.000Z"
+				},
+				"status": "success",
+				"result": {
+					"view": "look_through",
+					"status": "available",
+					"snapshot": {
+						"computedAt": "2025-01-03T00:00:00.000Z",
+						"baseCurrency": "EUR",
+						"valuedTotal": 10000
+					},
+					"items": [
+						{
+							"id": "ticker:TINY_B",
+							"weight": 4e-07,
+							"value": 0.004
+						}
+					],
+					"total": 3,
+					"nextOffset": null,
+					"omitted": 2
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2
+				},
+				"status": "success"
+			},
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2,
+					"offset": 2,
+					"computed_at": "2025-01-02T00:00:00.000Z"
+				},
+				"status": "success"
+			},
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2
+				},
+				"status": "success"
+			},
+			{
+				"name": "get_portfolio_holdings",
+				"arguments": {
+					"view": "look_through",
+					"limit": 2,
+					"offset": 2,
+					"computed_at": "2025-01-03T00:00:00.000Z"
+				},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_portfolio_holdings": 4
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Discard both old holdings, restart, use the new timestamp on continuation and reconcile three unique rows to EUR 10,000. TINY_A and TINY_B each contribute EUR 0.004, EUR 0.008 combined (EUR 0.01 formatted to cents). Preserve positive sub-cent amounts. A positive final omitted count does not require another page.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "portfolio-valued-concentration",
+		"skill": "portfolio-intelligence",
+		"prompt": "Read my connected analysis. Tell me the largest underlying position, top ten and largest issuer. Specify what fraction of the holdings could be valued and explain how the issuer differs from the holding.",
+		"files": [],
+		"allowed_tools": [
+			"get_portfolio_analysis"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_portfolio_analysis",
+				"arguments": {},
+				"status": "success",
+				"result": {
+					"status": "partial",
+					"snapshot": {
+						"valuedCount": 13,
+						"totalCount": 14,
+						"unvaluedCount": 1
+					},
+					"valuedHoldings": {
+						"basis": "valued_portfolio",
+						"largest": {
+							"name": "Fictional Alpha",
+							"weight": 0.04289
+						},
+						"topTenWeight": 0.211527
+					},
+					"concentration": {
+						"basis": "valued_equities",
+						"coverage": 0.99836,
+						"issuers": [
+							{
+								"issuerName": "Fictional Alpha",
+								"weight": 0.081798
+							}
+						]
+					}
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_portfolio_analysis",
+				"arguments": {},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_portfolio_analysis": 1
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "State that 13 of 14 holdings have valuations. Largest underlying holding is about 4.29% and top ten about 21.15% of the valued portfolio. The largest issuer is about 8.18% of valued equities. The weight of the unvalued position is unknown; avoid any full-book valuation or weight-coverage claim from the count alone.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "portfolio-issuer-coverage-50",
+		"skill": "portfolio-intelligence",
+		"prompt": "Read the issuer concentration of my connected equity portfolio. What can you say about the largest measured issuer, HHI, effective issuer count and the undisclosed fund? Do these figures establish a policy breach?",
+		"files": [],
+		"allowed_tools": [
+			"get_portfolio_analysis"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_portfolio_analysis",
+				"arguments": {},
+				"status": "success",
+				"result": {
+					"status": "partial",
+					"concentration": {
+						"basis": "valued_equities",
+						"coverage": 0.5,
+						"issuers": [
+							{
+								"issuerName": "Fictional Alpha",
+								"weight": 0.5
+							}
+						],
+						"hhi": null,
+						"effectiveN": null,
+						"metricBounds": null
+					},
+					"lookThrough": {
+						"opaqueSleeves": [
+							{
+								"name": "Fictional opaque fund",
+								"weight": 0.5,
+								"assetClass": "equities"
+							}
+						]
+					}
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_portfolio_analysis",
+				"arguments": {},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_portfolio_analysis": 1
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Report Fictional Alpha at 50% of valued equities and 50% unresolved. Withhold HHI and effective count despite the measured issuer. Do not imply an absence of concentration. The descriptive tool supplies no policy verdict.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "portfolio-issuer-coverage-80",
+		"skill": "portfolio-intelligence",
+		"prompt": "Read the issuer concentration of my connected equity portfolio. What can you say about the largest measured issuer, HHI, effective issuer count and the undisclosed fund? Do these figures establish a policy breach?",
+		"files": [],
+		"allowed_tools": [
+			"get_portfolio_analysis"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_portfolio_analysis",
+				"arguments": {},
+				"status": "success",
+				"result": {
+					"status": "partial",
+					"concentration": {
+						"basis": "valued_equities",
+						"coverage": 0.8,
+						"issuers": [
+							{
+								"issuerName": "Fictional Alpha",
+								"weight": 0.8
+							}
+						],
+						"hhi": 0.64,
+						"effectiveN": 1.5625,
+						"metricBounds": {
+							"hhi": "lower_bound",
+							"effectiveN": "upper_bound"
+						}
+					},
+					"lookThrough": {
+						"opaqueSleeves": [
+							{
+								"name": "Fictional opaque fund",
+								"weight": 0.19999999999999996,
+								"assetClass": "equities"
+							}
+						]
+					}
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_portfolio_analysis",
+				"arguments": {},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_portfolio_analysis": 1
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Report Fictional Alpha at 80% of valued equities and 20% unresolved. HHI is at least 0.64 and effective count is at most 1.5625. Preserve the inequality directions at exactly 80% coverage. Neither is an exact figure. The descriptive tool supplies no policy verdict.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "portfolio-unvalued-pair",
+		"skill": "portfolio-intelligence",
+		"prompt": "Read my one-year connected correlation. Report what the two measured holdings tell us and whether you can estimate the whole portfolio’s average correlation.",
+		"files": [],
+		"allowed_tools": [
+			"get_portfolio_correlations"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_portfolio_correlations",
+				"arguments": {
+					"window": "1y"
+				},
+				"status": "success",
+				"result": {
+					"status": "partial",
+					"reason": "insufficient_valued_coverage",
+					"basis": "weekly_total_return_eur",
+					"frequency": "weekly",
+					"method": "pearson_common_sample",
+					"from": "2024-01-05",
+					"to": "2025-01-03",
+					"commonWeeks": 52,
+					"priceBasisIsins": [
+						"XA0000000022"
+					],
+					"omittedPriceBasisIsins": 0,
+					"coverage": null,
+					"weightedMeanCorrelation": null,
+					"largestGroupShare": null,
+					"pairs": [
+						{
+							"a": "XA0000000014",
+							"b": "XA0000000022",
+							"n": 52,
+							"correlation": 2.5e-16,
+							"band": "low_linear"
+						}
+					],
+					"nextOffset": null,
+					"total": 1
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_portfolio_correlations",
+				"arguments": {
+					"window": "1y"
+				},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_portfolio_correlations": 1
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Report measured near-zero Pearson correlation for this one pair, 52 common weekly EUR observations, the stated dates and second holding’s price-only exception. Unknown valuation leaves weighted mean, weighted coverage and group share unavailable. The pair does not establish portfolio-wide diversification.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "portfolio-dividend-boundary",
+		"skill": "portfolio-intelligence",
+		"prompt": "My connected account received its only EUR 10 dividend on March 20. Compare the one-month and three-month explanations, in that order. Explain how much dividend belongs before and after their shared March 20 boundary.",
+		"files": [],
+		"allowed_tools": [
+			"get_performance_explanation"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_performance_explanation",
+				"arguments": {
+					"range": "1m"
+				},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"data": {
+						"analysis": {
+							"window": {
+								"from": "2025-03-20",
+								"to": "2025-03-24"
+							},
+							"wealthBridge": {
+								"currency": "EUR",
+								"window": {
+									"from": "2025-03-20",
+									"to": "2025-03-24"
+								},
+								"income": 0,
+								"localPrice": 0,
+								"quoteFx": 0,
+								"unvaluedIntervalCount": 0
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "get_performance_explanation",
+				"arguments": {
+					"range": "3m"
+				},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"data": {
+						"analysis": {
+							"window": {
+								"from": "2025-03-16",
+								"to": "2025-03-24"
+							},
+							"wealthBridge": {
+								"currency": "EUR",
+								"window": {
+									"from": "2025-03-16",
+									"to": "2025-03-24"
+								},
+								"income": 10,
+								"localPrice": 0,
+								"quoteFx": 0,
+								"unvaluedIntervalCount": 0
+							}
+						}
+					}
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_performance_explanation",
+				"arguments": {
+					"range": "1m"
+				},
+				"status": "success"
+			},
+			{
+				"name": "get_performance_explanation",
+				"arguments": {
+					"range": "3m"
+				},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_performance_explanation": 2
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Use the returned dates. EUR 10 belongs to March 16 close through March 20 close, zero to March 20 close through March 24 close, EUR 10 across both. Do not count the payment twice or attribute it to price or FX.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "decision-completed-review",
+		"skill": "investment-decision-making",
+		"prompt": "Did I complete my latest prepared review? Read its receipt, open the approved record, then compare its selected portfolio with the current value. Keep the original and current evidence separate.",
+		"files": [],
+		"allowed_tools": [
+			"get_prepared_review",
+			"get_approved_review",
+			"get_review_changes"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_prepared_review",
+				"arguments": {},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"scope": "selected_portfolios",
+					"data": {
+						"state": "review_completed",
+						"receipts": [
+							{
+								"operation": "complete_review",
+								"recordId": "00000000-0000-4000-8000-000000000011"
+							}
+						],
+						"review": {
+							"source": {
+								"portfolio_ids": [
+									"00000000-0000-4000-8000-000000000022"
+								]
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "get_approved_review",
+				"arguments": {
+					"record_id": "00000000-0000-4000-8000-000000000011"
+				},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"scope": "selected_portfolios",
+					"data": {
+						"receipt": {
+							"operation": "complete_review",
+							"recordId": "00000000-0000-4000-8000-000000000011"
+						},
+						"review": {
+							"comparison": {
+								"opening": 100,
+								"closing": 140
+							},
+							"source": {
+								"currency": "EUR",
+								"portfolio_ids": [
+									"00000000-0000-4000-8000-000000000022"
+								]
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "get_review_changes",
+				"arguments": {
+					"portfolio_ids": [
+						"00000000-0000-4000-8000-000000000022"
+					]
+				},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"scope": "selected_portfolios",
+					"data": {
+						"comparison": {
+							"opening": 140,
+							"closing": 160,
+							"ruleChanges": []
+						},
+						"source": {
+							"currency": "EUR",
+							"portfolio_ids": [
+								"00000000-0000-4000-8000-000000000022"
+							]
+						}
+					}
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_prepared_review",
+				"arguments": {},
+				"status": "success"
+			},
+			{
+				"name": "get_approved_review",
+				"arguments": {
+					"record_id": "00000000-0000-4000-8000-000000000011"
+				},
+				"status": "success"
+			},
+			{
+				"name": "get_review_changes",
+				"arguments": {
+					"portfolio_ids": [
+						"00000000-0000-4000-8000-000000000022"
+					]
+				},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_prepared_review": 1,
+			"get_approved_review": 1,
+			"get_review_changes": 1
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Report completed status and a matching completion receipt. Frozen approved closing value EUR 140 follows opening EUR 100; the same selected portfolio is now EUR 160. Do not re-prepare, approve, revise the saved record or generalize this to all accounts.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "decision-rule-observations",
+		"skill": "investment-decision-making",
+		"prompt": "My mandate counter moved from 4 to 7. Read changes to the declared rules and then the observed breaches since review. Did my allocation rule change?",
+		"files": [],
+		"allowed_tools": [
+			"get_review_changes"
+		],
+		"tool_fixtures": [
+			{
+				"name": "get_review_changes",
+				"arguments": {
+					"detail": "rule_changes"
+				},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"scope": "whole_wealth",
+					"data": {
+						"comparison": {
+							"ruleChanges": []
+						},
+						"detail_page": {
+							"detail": "rule_changes",
+							"total_items": 0,
+							"next_offset": null
+						}
+					}
+				}
+			},
+			{
+				"name": "get_review_changes",
+				"arguments": {
+					"detail": "rule_observations"
+				},
+				"status": "success",
+				"result": {
+					"status": "available",
+					"scope": "whole_wealth",
+					"data": {
+						"comparison": {
+							"ruleObservations": [
+								{
+									"ruleId": "allocation:crypto",
+									"kind": "new_breach",
+									"beforeBreachPp": 0,
+									"afterBreachPp": 2
+								}
+							]
+						},
+						"detail_page": {
+							"detail": "rule_observations",
+							"total_items": 1,
+							"next_offset": null
+						}
+					}
+				}
+			}
+		],
+		"required_calls": [
+			{
+				"name": "get_review_changes",
+				"arguments": {
+					"detail": "rule_changes"
+				},
+				"status": "success"
+			},
+			{
+				"name": "get_review_changes",
+				"arguments": {
+					"detail": "rule_observations"
+				},
+				"status": "success"
+			}
+		],
+		"max_calls": {
+			"get_review_changes": 2
+		},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "There were zero declared rule changes. The counter is bookkeeping. Report the new two-percentage-point crypto allocation breach as an observation under the existing rule. Do not invent a policy amendment or silently drop the breach.",
+				"critical": true
+			}
+		]
+	},
+	{
+		"id": "portfolio-effective-fund-weights",
+		"skill": "portfolio-intelligence",
+		"prompt": "Reproduce the public Investboard engine's long-only calculation on my supplied disclosures. Two distinct funds are worth EUR 100 each. Fund A reports 75% Alpha and 75% Beta. Fund B reports 80% Alpha and an unknown remainder. Apply the engine’s proportional correction to Fund A. What are the company amounts, unresolved value, fund-pair overlap, issuer HHI and effective issuer bounds? Treat Alpha and Beta as separate issuers, with all exposure in equities.",
+		"files": [],
+		"allowed_tools": [],
+		"tool_fixtures": [],
+		"required_calls": [],
+		"max_calls": {},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Explain the 150% disclosure and scale both A entries to 50%. Leave B's 20% remainder unresolved. Alpha EUR 130 (65% of EUR 200), Beta EUR 50 (25%), unresolved EUR 20 (10%). Fund-pair overlap is 50%. At 90% issuer attribution, HHI ≥0.485 and effective issuer count ≤1 / 0.485 (about 2.06186 with outward rounding).",
+				"critical": true
+			}
+		]
 	}
 ]

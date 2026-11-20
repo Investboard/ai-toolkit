@@ -13,7 +13,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { digest, validateCase } from "./lib/contracts.mjs";
+import { digest, fixtureReplay, validateCase } from "./lib/contracts.mjs";
 import { gradeSuite } from "./lib/grade.mjs";
 import { loadSuite, readJsonl } from "./lib/suite.mjs";
 
@@ -22,6 +22,7 @@ const suite = await loadSuite(root);
 const find = (id) => suite.cases.find((c) => c.id === id);
 // These are unit-test simulations of normalized captures, never model runs.
 function trace(c, overrides = {}) {
+	const replay = fixtureReplay(c.tool_fixtures);
 	return {
 		schema_version: 1,
 		case_id: c.id,
@@ -41,14 +42,7 @@ function trace(c, overrides = {}) {
 		},
 		skills_loaded: ["any", "none"].includes(c.skill) ? [] : [c.skill],
 		tool_calls: c.required_calls.map((required) =>
-			structuredClone(
-				c.tool_fixtures.find(
-					(fixture) =>
-						fixture.name === required.name &&
-						JSON.stringify(fixture.arguments) ===
-							JSON.stringify(required.arguments),
-				),
-			),
+			structuredClone(replay(required.name, required.arguments)),
 		),
 		answer: "Synthetic unit-test answer.",
 		...overrides,
@@ -68,10 +62,10 @@ function graded(t, c = find(t.case_id)) {
 }
 
 test("validates the complete synthetic corpus without grading model behavior", () => {
-	assert.equal(suite.case_count, 24);
+	assert.equal(suite.case_count, 33);
 	assert.equal(suite.behavior_status, "not_run");
 	assert.match(suite.skills_sha256, /^[a-f0-9]{64}$/);
-	assert.equal(new Set(suite.cases.map((c) => c.case_sha256)).size, 24);
+	assert.equal(new Set(suite.cases.map((c) => c.case_sha256)).size, 33);
 });
 test("the corpus loads without the independently maintained public examples", async () => {
 	const dir = await mkdtemp(path.join(os.tmpdir(), "investboard-fixtures-"));
@@ -90,7 +84,7 @@ test("the corpus loads without the independently maintained public examples", as
 			{ recursive: true },
 		);
 		const isolated = await loadSuite(dir);
-		assert.equal(isolated.case_count, 24);
+		assert.equal(isolated.case_count, suite.case_count);
 		assert.equal(isolated.suite_sha256, suite.suite_sha256);
 		assert.equal(isolated.skills_sha256, suite.skills_sha256);
 	} finally {
@@ -151,11 +145,11 @@ test("the complete and partial CSV fixtures support their numerical rubric", asy
 		);
 	}
 });
-test("no captures is incomplete with zero passes and 48 not-run observations", () => {
+test("no captures is incomplete with zero passes and both conditions not run", () => {
 	const report = gradeSuite(suite, []);
 	assert.equal(report.status, "incomplete");
 	assert.equal(report.summary.with_skill.pass, 0);
-	assert.equal(report.results.filter((r) => r.status === "not_run").length, 48);
+	assert.equal(report.results.filter((r) => r.status === "not_run").length, 2 * suite.case_count);
 });
 test("synthetic grader fixtures cannot count as model passes even with all reviews", () => {
 	const c = find("portfolio-overlap-file-only"),
@@ -183,6 +177,16 @@ test("captured traces need every qualitative review", () => {
 		t = trace(c);
 	assert.equal(resultFor(gradeSuite(suite, [t]), c.id).status, "needs_review");
 	assert.equal(graded(t, c).status, "pass");
+});
+test("the grader rejects mixed holdings snapshots and a missed restart", () => {
+	const c = find("portfolio-restart-holdings");
+	const t = trace(c);
+	assert.equal(graded(t).status, "pass");
+	const spliced = structuredClone(t);
+	spliced.tool_calls[2].result = spliced.tool_calls[0].result;
+	assert.ok(graded(spliced).failures.some((f) => f.check_id === "tool_fixture_mismatch"));
+	t.tool_calls.splice(2, 1);
+	assert.ok(graded(t).failures.some((f) => f.check_id === "required_tool_sequence"));
 });
 test("changing an answer invalidates its previous reviewer decisions", () => {
 	const c = find("portfolio-overlap-file-only"),
@@ -405,7 +409,7 @@ test("a complete evaluated pair produces a baseline comparison", () => {
 		}
 	const report = gradeSuite(suite, captures, reviews);
 	assert.equal(report.status, "pass");
-	assert.equal(report.summary.with_skill.pass, 24);
+	assert.equal(report.summary.with_skill.pass, suite.case_count);
 	assert.equal(report.comparison.status, "complete");
 });
 test("reports omit raw answers, tool arguments, results and reviewer identities", () => {
@@ -566,7 +570,7 @@ test("CLI exits incomplete for an incompatible baseline despite with-skill passe
 		);
 		assert.equal(run.status, 2);
 		const report = JSON.parse(run.stdout);
-		assert.equal(report.summary.with_skill.pass, 24);
+		assert.equal(report.summary.with_skill.pass, suite.case_count);
 		assert.equal(report.comparison.status, "incompatible");
 	} finally {
 		await rm(dir, { recursive: true, force: true });

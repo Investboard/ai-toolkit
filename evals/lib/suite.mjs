@@ -50,8 +50,8 @@ export async function loadSuite(root) {
 	} catch {
 		fail("Cannot read the evaluation corpus");
 	}
-	if (!Array.isArray(cases) || cases.length !== 24)
-		fail("Expected the complete 24-case corpus");
+	if (!Array.isArray(cases) || cases.length !== 33)
+		fail("Expected the complete 33-case corpus");
 	const seen = new Set();
 	const packets = [];
 	const realRoot = await realpath(root);
@@ -69,8 +69,8 @@ export async function loadSuite(root) {
 		packets.push({ ...c, case_sha256: digest({ case: c, files }) });
 	}
 	for (const skill of SKILLS)
-		if (cases.filter((c) => c.skill === skill).length !== 5)
-			fail("Each skill needs five cases");
+		if (cases.filter((c) => c.skill === skill).length < 5)
+			fail("Each skill needs at least five cases");
 	return {
 		schema_version: 1,
 		kind: "suite_validation",

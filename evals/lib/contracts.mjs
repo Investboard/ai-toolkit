@@ -1,5 +1,28 @@
 import { createHash } from "node:crypto";
 
+import { isDeepStrictEqual } from "node:util";
+
+export function effectiveArguments(name, args) {
+	return name === "get_portfolio_holdings"
+		? { view: "look_through", limit: 20, offset: 0, ...args }
+		: args;
+}
+
+// Repeated requests can legitimately observe a new snapshot on a restart.
+export function fixtureReplay(fixtures) {
+	const seen = new Map();
+	return (name, args) => {
+		const requested = effectiveArguments(name, args);
+		const matches = fixtures.filter(
+			(f) => f.name === name && isDeepStrictEqual(effectiveArguments(name, f.arguments), requested),
+		);
+		if (matches.length < 2) return matches[0];
+		const index = seen.get(matches[0]) ?? 0;
+		seen.set(matches[0], index + 1);
+		return matches[index];
+	};
+}
+
 export const CONDITIONS = ["with_skill", "without_skill"];
 export const LOCAL_TOOLS = ["read_file", "calculate", "load_skill"];
 export const SKILLS = [

@@ -1,7 +1,9 @@
 import {
 	CONDITIONS,
 	digest,
+	effectiveArguments,
 	fail,
+	fixtureReplay,
 	LOCAL_TOOLS,
 	SKILLS,
 	safeRelative,
@@ -54,6 +56,7 @@ function automatic(c, trace, skillsHash) {
 			reject("required_skill_activation");
 	}
 	const counts = new Map();
+	const replay = fixtureReplay(c.tool_fixtures);
 	for (const call of trace.tool_calls) {
 		counts.set(call.name, (counts.get(call.name) ?? 0) + 1);
 		if (![...LOCAL_TOOLS, ...c.allowed_tools].includes(call.name))
@@ -80,12 +83,7 @@ function automatic(c, trace, skillsHash) {
 		)
 			reject("invalid_calculation_arguments");
 		if (c.allowed_tools.includes(call.name)) {
-			const fixture = c.tool_fixtures.find(
-				(f) =>
-					f.name === call.name &&
-					matches(f.arguments, call.arguments) &&
-					matches(call.arguments, f.arguments),
-			);
+			const fixture = replay(call.name, call.arguments);
 			if (
 				!fixture ||
 				call.status !== fixture.status ||
@@ -102,7 +100,7 @@ function automatic(c, trace, skillsHash) {
 			(call, i) =>
 				i >= from &&
 				call.name === required.name &&
-				matches(call.arguments, required.arguments ?? {}) &&
+				matches(effectiveArguments(call.name, call.arguments), required.arguments ?? {}) &&
 				(required.status === undefined || required.status === call.status),
 		);
 		if (index < 0) reject("required_tool_sequence");

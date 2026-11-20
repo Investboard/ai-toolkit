@@ -1,7 +1,6 @@
 import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
-import { isDeepStrictEqual } from "node:util";
-import { digest, fail, safeRelative } from "./contracts.mjs";
+import { digest, fail, fixtureReplay, safeRelative } from "./contracts.mjs";
 
 // Synthetic interfaces, not a copy of the production input/output contracts.
 const descriptions = {
@@ -12,9 +11,13 @@ const descriptions = {
 	get_reflection_history: "Read saved checks and outcomes by id or cursor.",
 	get_own_record: "Read the investor's thesis by ticker and optional exchange.",
 	get_journal: "Read journal entries and due reviews by cursor.",
-	get_portfolio_holdings: "Read connected portfolio holdings.",
+	get_portfolio_holdings: "Read connected portfolio holdings with view (direct or look_through), limit and offset. Send computed_at on continuation.",
 	get_portfolio_analysis: "Read portfolio exposures and overlap.",
-	get_portfolio_correlations: "Read measured historical correlations.",
+	get_performance_explanation: "Read the performance explanation with range such as 1m or 3m.",
+	get_review_changes: "Read live changes since review. Choose portfolio_ids for selected scope and detail (including rule_changes or rule_observations).",
+	get_prepared_review: "Read the latest prepared review or a specified request.",
+	get_approved_review: "Read a frozen approved review using record_id from a completion receipt.",
+	get_portfolio_correlations: "Read measured historical correlations for a window such as 1y.",
 	prepare_portfolio_import:
 		"Stage supplied portfolio data for investor confirmation.",
 	get_portfolio_import: "Read this client's import submission status.",
@@ -81,6 +84,7 @@ export async function createFixtureServer(session, directory, record) {
 	};
 	let initialized = false;
 	const counts = new Map();
+	const replay = fixtureReplay(session.packet.tool_fixtures);
 	return async (message) => {
 		if (
 			!message ||
@@ -127,9 +131,7 @@ export async function createFixtureServer(session, directory, record) {
 		let outcome;
 		if (name === "read_file") outcome = await read(args);
 		else {
-			const fixture = session.packet.tool_fixtures.find(
-				(f) => f.name === name && isDeepStrictEqual(f.arguments, args),
-			);
+			const fixture = replay(name, args);
 			// Match the grader's per-tool budget, independent of argument key order.
 			counts.set(name, (counts.get(name) ?? 0) + 1);
 			outcome =
