@@ -150,11 +150,11 @@ Manage permissions, portfolio sharing and revocation in Investboard’s assistan
 
 [Download the latest release](https://github.com/Investboard/ai-toolkit/releases/latest) for the complete plugin, marketplace bundle or individual skills. Release assets include SHA-256 checksums. The website also hosts versioned downloads. A newer repository commit does not mean its ZIP release is already published. Download versions are separate from the published OpenAI plugin version.
 
-Update the installed skills or plugin through your client’s update flow. Update individual ZIP installations by uploading the newer version. Package versions are separate from the MCP server’s Registry version.
+Update the installed skills or plugin through your client’s update flow. Update individual ZIP installations by uploading the newer version. Package versions are separate from the MCP server’s Registry version. Maintainers can [build and verify all release downloads locally](scripts/RELEASE.md).
 
 ## Evaluate the skills
 
-The [offline evaluation harness](evals/README.md) includes 24 synthetic scenarios for the four skills. Validate the cases locally or grade saved agent traces with explicit human review. The harness makes no model calls; synthetic fixtures and missing runs do not count as behavior passes.
+The [offline evaluation harness](evals/README.md) includes 32 synthetic scenarios for the four skills. Validate the cases locally or grade saved agent traces with explicit human review. The harness makes no model calls; synthetic fixtures and missing runs do not count as behavior passes.
 
 ## License and help
 

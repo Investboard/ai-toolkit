@@ -235,6 +235,39 @@ test("fixture replay budgets cover reordered arguments and all pages of a tool",
 		);
 	}
 });
+test("a stale holdings cursor restarts at page zero and replays the new observation", async (t) => {
+	const { directory, session } = await prepared(t, "portfolio-restart-holdings");
+	const handle = await createFixtureServer(session, directory, async () => {});
+	await handle({ jsonrpc: "2.0", id: 1, method: "initialize" });
+	const page = async (args) => {
+		const { result } = await handle({
+			jsonrpc: "2.0",
+			id: 2,
+			method: "tools/call",
+			params: { name: "get_portfolio_holdings", arguments: args },
+		});
+		assert.equal(result.isError, false);
+		return result.structuredContent;
+	};
+	const first = await page({ limit: 2 });
+	const next = (p) => page({
+		view: "look_through", limit: 2, offset: p.nextOffset, computed_at: p.snapshot.computedAt,
+	});
+	const stale = await next(first);
+	assert.equal(stale.status, "snapshot_changed");
+	assert.equal(stale.total, null);
+	const restarted = await page({ limit: 2, view: "look_through", offset: 0 });
+	assert.notEqual(restarted.snapshot.computedAt, first.snapshot.computedAt);
+	const last = await next(restarted);
+	assert.equal(last.nextOffset, null);
+	assert.ok(last.omitted > 0);
+	const rows = [...restarted.items, ...last.items];
+	assert.equal(new Set(rows.map((r) => r.id)).size, restarted.total);
+	assert.ok(rows.every((r) => !first.items.some((old) => old.id === r.id)));
+	assert.ok(Math.abs(rows.reduce((n, r) => n + r.weight, 0) - 1) < 1e-12);
+	assert.ok(Math.abs(rows.reduce((n, r) => n + r.value, 0) - restarted.snapshot.valuedTotal) < 1e-9);
+	assert.equal(rows.filter((r) => r.value < 0.01).reduce((n, r) => n + r.value, 0), 0.008);
+});
 test("authoritative denied calls remain errors without a fixture-server invocation", async (t) => {
 	const { session } = await prepared(
 		t,

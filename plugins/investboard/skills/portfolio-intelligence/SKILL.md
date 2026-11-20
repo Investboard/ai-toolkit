@@ -36,7 +36,14 @@ When advertised by the connected server, `get_portfolio_holdings` reads direct
 or equity look-through positions, `get_portfolio_analysis` reads exposures,
 concentration and overlap, and `get_portfolio_correlations` reads measured
 historical correlations. Inspect their schemas and preserve the returned
-scope, dates, coverage and snapshot cursor. They require `portfolio:read`,
+scope, dates and coverage. For a complete holdings list follow `nextOffset`
+using the first page's `snapshot.computedAt` as `computed_at` on every
+continuation. On `snapshot_changed`, discard the collected pages and start at
+offset zero. For a concentration summary use the analysis tool's full-scope
+metrics and its stated denominators. See [Analysis methods](references/analysis-methods.md)
+for incomplete coverage, precision, pair evidence and dividend windows.
+
+These tools require `portfolio:read`,
 the applicable entitlement and enabled portfolio sharing. A listed tool is
 not proof of a grant: follow the assistant's permission-upgrade flow when
 needed, and never treat an opt-out as permission to reconnect around it.

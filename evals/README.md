@@ -1,7 +1,7 @@
 # Offline skill evaluations
 
-This corpus covers the four Investboard skills with 24 synthetic scenarios:
-five per skill and four negative controls. It tests tool choices, consent,
+This corpus covers the four Investboard skills with 32 synthetic scenarios:
+the original five per skill, eight connected evidence cases and four negative controls. It tests tool choices, consent,
 evidence limits, retries, ambiguous identities and prompt injection.
 
 The harness **only reads saved traces**. It contains no model client, network
@@ -67,7 +67,11 @@ do not give that operator fixture definition to the model as a substitute for
 calling the tools. Result objects are required **projections** of normalized
 structured tool results, not complete SDK response schemas. An adapter can add
 the remaining schema fields. Every invoked account tool must match a declared
-fixture's arguments, outcome and projected result.
+fixture's arguments, outcome and projected result. When identical requests have
+multiple fixture entries, serve and grade them in declared order. The holdings
+restart case uses this to change the snapshot returned by a second first-page
+request. The fixture accepts the holdings API defaults for omitted view, offset
+and page size.
 
 Keep the original complete client capture privately, including model settings,
 tool definitions and the exact MCP initialization instructions. Keep that context
@@ -176,7 +180,7 @@ review JSONL record per check:
 {"trace_sha256":"the exact report hash","check_id":"case_behavior","verdict":"pass","reviewer":"reviewer identifier"}
 ```
 
-Use `pass` or `fail`; also review `evidence_and_consent`. A changed answer,
+Use `pass` or `fail`; also review `evidence_and_consent` when listed. A changed answer,
 tool call or provenance invalidates old reviews. Then grade into a new report:
 
 ```sh
@@ -195,11 +199,11 @@ node scripts/eval-skills.mjs grade \
   an unrequested write or disclosure cannot be averaged away.
 - `pass`: an eligible captured trace passed every automatic and human check.
 
-Exit codes are 0 for valid corpus validation or all **24 with-skill** observations
+Exit codes are 0 for valid corpus validation or all **32 with-skill** observations
 passing with no incompatible baseline, 1 for invalid inputs or a with-skill failure,
 and 2 for incomplete with-skill evidence or an incompatible supplied baseline.
 Check the report `kind`: validation success is not a
-behavior pass. Baseline comparison is only complete when all 48 observations
+behavior pass. Baseline comparison is only complete when all 64 observations
 are graded using matching client, model and configuration metadata. Mismatches
 report `comparison.status: "incompatible"` and produce no improvement score.
 A baseline behavior failure

@@ -91,6 +91,19 @@ do not infer one from silence, a hypothetical preference or a draft plan.
 
 ## Review previous decisions
 
+For a connected portfolio review, `get_review_changes` reports live changes for
+the selected scope. Read declared rule changes from `comparison.ruleChanges`
+and changes in observed breaches from `comparison.ruleObservations`. A counter
+or timestamp can change without an amendment to the investor's rule. Preserve
+unavailable standing when the selected portfolio cannot establish it.
+
+Use `get_prepared_review` to check the preparation's current state and receipts.
+A `review_completed` state with a `complete_review` receipt records completion.
+Read the frozen approved comparison with `get_approved_review` when requested.
+Quote its scope, values and evidence date separately from a current review.
+A later change in value does not revise the approved record. For a revision
+conflict on a live paged comparison, restart the same selected scope.
+
 Read `get_reflection_history` for saved checks and investor-reported outcomes.
 Read `get_journal` for the investor's writing and, when asked, use
 `reviews_due_only: true` for due reviews. Follow returned cursor pairs until

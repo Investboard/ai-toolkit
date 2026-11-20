@@ -29,6 +29,16 @@ Leveraged funds, derivatives, short positions and liabilities need explicit
 exposure definitions; ordinary long-only weight calculations cannot represent
 them as if they were fully valued positive holdings.
 
+A connected snapshot covers all imported accounts in scope. Give the valued and
+total position counts when they differ. A missing valuation leaves portfolio
+wealth unknown. The connected analysis reports `valuedHoldings.largest` and
+`valuedHoldings.topTenWeight` for its eligible look-through holdings as shares
+of the valued portfolio. Combine a company's parts across asset classes before ranking. Eligible
+positions span asset classes and include directly held cash. Exclude
+`residual:` rows from the ranking while retaining their value in the
+denominator. This applies even when the residual represents an entire opaque
+fund. The first page of holdings can mix eligible positions and remainders.
+
 ## Look-through
 
 For a long-only fund with disclosed constituent weights, the portfolio weight
@@ -44,7 +54,8 @@ identifiers, not a ticker spelling alone. Aggregate issuer exposure separately
 using verified issuer identities; different securities or share classes can
 belong to one issuer without being the same security.
 
-For nested funds, multiply weights along the evidenced path. Stop at missing
+Investboard's connected view follows one disclosed constituent layer. For a
+separate analysis of supplied nested disclosures, multiply weights along the evidenced path. Stop at missing
 constituent data or a repeated fund identity and retain that weight as unresolved.
 Count the fund wrapper or its decomposed underlying exposure in a total, never
 both. Preserve cash and undisclosed remainders. Top holdings alone are partial
@@ -54,6 +65,16 @@ State constituent dates and whether weights describe holdings, an index or a
 proxy. An index composition is not automatically the fund's actual portfolio,
 especially for synthetic replication. Keep issuer geography, revenue exposure,
 listing currency and economic currency exposure distinct.
+
+When collecting connected holdings, preserve each returned row ID, including
+any asset-class suffix. Use the same view and page size throughout. A complete
+traversal has distinct IDs accounting for the reported total and ends with
+`nextOffset: null`. An unavailable page, repeated offset or missing rows leaves
+a partial list. The per-page `omitted` count can be positive on the final page.
+A complete list can still contain opaque exposure or have unvalued positions.
+Sum raw `weight` fractions and `value` amounts at the returned precision before
+formatting. A row smaller than one display unit still contributes. Direct and
+fund provenance describe parts of a row already included in its weight.
 
 ## Overlap
 
@@ -97,6 +118,15 @@ or issuers and which book is measured. With incomplete identity or weight
 coverage, show supplied metrics with their documented bounds or mark the
 calculation unavailable; a single normalized point estimate would hide gaps.
 
+In connected analysis, `concentration.issuers` uses valued equities, including
+unattributed equity in the denominator. At 50% attributed issuer coverage,
+report a measured 50% issuer exposure when present and leave both HHI and
+effective issuer count unavailable. Starting at 80% coverage, follow
+`metricBounds`: with one identified issuer at 80% and the rest unresolved,
+HHI is at least 0.64 and effective count is at most 1.5625. Exact values require
+full attribution. The descriptive analysis does not establish an investor cap
+or a mandate breach.
+
 ## Historical correlations
 
 Use date-aligned return observations, not correlations between price levels.
@@ -121,6 +151,23 @@ data is available, explain potential shared risk drivers qualitatively and
 mark measured correlation unavailable. With sufficient history, comparisons
 across windows can show how correlations varied; describe an actual stress
 period separately from a hypothetical scenario.
+
+If `get_portfolio_correlations` returns `partial` with
+`insufficient_valued_coverage`, report any measured pair with its dates,
+coefficient and common weeks. Preserve price-return exceptions in
+`priceBasisIsins` and their omitted count. Portfolio-weighted mean correlation,
+weighted coverage and largest-group share remain unknown when their fields
+are null. A near-zero pair coefficient describes that pair's linear association.
+
+## Dividend timing
+
+For `get_performance_explanation`, read the actual measurement dates and the
+wealth bridge's currency and income basis. Adjacent close-to-close windows
+include a dividend on the closing date and exclude it on the opening date.
+For a single EUR 10 dividend at the shared boundary, recorded income is EUR 10
+in the first window, zero in the second and EUR 10 across both. Keep any
+missing currency conversion or unvalued interval visible when explaining
+income, price and FX. Preserve withheld components and the bridge residual.
 
 ## Sources
 

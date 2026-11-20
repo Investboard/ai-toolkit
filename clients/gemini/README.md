@@ -12,13 +12,11 @@ gemini extensions install https://github.com/Investboard/ai-toolkit --ref main
 gemini skills install https://github.com/Investboard/ai-toolkit --path plugins/investboard/skills
 ```
 
-The first command installs the MCP extension from stable `main`. The second
-installs the four skills from their existing canonical directory on the default
-branch. The complete plugin and individual skill ZIPs are separate downloads
+The first command installs the MCP extension from stable `main`. If Gemini offers
+to clone the repository to resolve that branch, accept the source install. The
+second command installs the four skills from their canonical directory on the
+default branch. The complete plugin and individual skill ZIPs are separate downloads
 for other installation routes. Use a current Gemini CLI version.
-
-If a skill is already installed from this source, keep that installation and
-use its normal update flow instead of adding another copy.
 
 If Investboard is already configured in Gemini, reuse that server and its
 permissions. An existing `settings.json` server named `investboard` takes
@@ -50,7 +48,7 @@ prepare a self-contained archive with regular files:
 python3 scripts/prepare-client-installers.py --output-dir /tmp/investboard-client-installers
 ```
 
-Extract `investboard-gemini-2.1.3.zip` and install the extracted directory with
+Extract `investboard-gemini-2.1.4.zip` and install the extracted directory with
 `gemini extensions install /absolute/path/to/extracted-directory`.
 The archive has its manifest at the root and all four skills under `skills/`.
 This Gemini archive is separate from the complete plugin and individual skill
@@ -58,8 +56,12 @@ downloads.
 
 ## Updates
 
-Use Gemini's extension update command when an update is available. The four
-skill directories are Apache-2.0 licensed and carry their LICENSE, NOTICE and
+Use Gemini's extension update command when an update is available. If you
+installed from source with the two commands above, rerun the `gemini skills
+install` command to refresh the four separately installed skill copies. For
+the bundled extension archive, the extension update includes its skills.
+
+The four skill directories are Apache-2.0 licensed and carry their LICENSE, NOTICE and
 LICENSE.md. The extension wrapper, app, hosted MCP backend, Premium data and
 branding remain proprietary. See [the license scope](../../LICENSE.md).
 
