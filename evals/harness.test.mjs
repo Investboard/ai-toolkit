@@ -62,10 +62,10 @@ function graded(t, c = find(t.case_id)) {
 }
 
 test("validates the complete synthetic corpus without grading model behavior", () => {
-	assert.equal(suite.case_count, 32);
+	assert.equal(suite.case_count, 33);
 	assert.equal(suite.behavior_status, "not_run");
 	assert.match(suite.skills_sha256, /^[a-f0-9]{64}$/);
-	assert.equal(new Set(suite.cases.map((c) => c.case_sha256)).size, 32);
+	assert.equal(new Set(suite.cases.map((c) => c.case_sha256)).size, 33);
 });
 test("the corpus loads without the independently maintained public examples", async () => {
 	const dir = await mkdtemp(path.join(os.tmpdir(), "investboard-fixtures-"));

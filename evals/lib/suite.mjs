@@ -50,8 +50,8 @@ export async function loadSuite(root) {
 	} catch {
 		fail("Cannot read the evaluation corpus");
 	}
-	if (!Array.isArray(cases) || cases.length !== 32)
-		fail("Expected the complete 32-case corpus");
+	if (!Array.isArray(cases) || cases.length !== 33)
+		fail("Expected the complete 33-case corpus");
 	const seen = new Set();
 	const packets = [];
 	const realRoot = await realpath(root);

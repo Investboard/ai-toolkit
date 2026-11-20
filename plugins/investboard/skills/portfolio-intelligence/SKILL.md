@@ -62,7 +62,7 @@ an outcome the investor has stated.
 Read [Analysis methods](references/analysis-methods.md) for the relevant
 calculation or for interpreting an unfamiliar metric.
 
-Keep the supplied whole-portfolio basis by default; introduce a non-cash basis
+Use the valued portfolio as the connected holding-weight denominator. State how many positions lack a valuation. For supplied data, keep its documented basis and introduce a non-cash basis
 only when it helps answer the question. Label every percentage with its
 denominator before interpreting it. A company
 exposure calculated from whole-portfolio weights remains a percentage of the

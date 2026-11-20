@@ -1666,5 +1666,23 @@
 				"critical": true
 			}
 		]
+	},
+	{
+		"id": "portfolio-effective-fund-weights",
+		"skill": "portfolio-intelligence",
+		"prompt": "Reproduce the public Investboard engine's long-only calculation on my supplied disclosures. Two distinct funds are worth EUR 100 each. Fund A reports 75% Alpha and 75% Beta. Fund B reports 80% Alpha and an unknown remainder. Apply the engine’s proportional correction to Fund A. What are the company amounts, unresolved value, fund-pair overlap, issuer HHI and effective issuer bounds? Treat Alpha and Beta as separate issuers, with all exposure in equities.",
+		"files": [],
+		"allowed_tools": [],
+		"tool_fixtures": [],
+		"required_calls": [],
+		"max_calls": {},
+		"forbidden_text": [],
+		"reviews": [
+			{
+				"id": "case_behavior",
+				"description": "Explain the 150% disclosure and scale both A entries to 50%. Leave B's 20% remainder unresolved. Alpha EUR 130 (65% of EUR 200), Beta EUR 50 (25%), unresolved EUR 20 (10%). Fund-pair overlap is 50%. At 90% issuer attribution, HHI ≥0.485 and effective issuer count ≤1 / 0.485 (about 2.06186 with outward rounding).",
+				"critical": true
+			}
+		]
 	}
 ]

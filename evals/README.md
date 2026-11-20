@@ -1,7 +1,7 @@
 # Offline skill evaluations
 
-This corpus covers the four Investboard skills with 32 synthetic scenarios:
-the original five per skill, eight connected evidence cases and four negative controls. It tests tool choices, consent,
+This corpus covers the four Investboard skills with 33 synthetic scenarios:
+the original five per skill, eight connected evidence cases, one file-only calculation and four negative controls. It tests tool choices, consent,
 evidence limits, retries, ambiguous identities and prompt injection.
 
 The harness **only reads saved traces**. It contains no model client, network
@@ -199,7 +199,7 @@ node scripts/eval-skills.mjs grade \
   an unrequested write or disclosure cannot be averaged away.
 - `pass`: an eligible captured trace passed every automatic and human check.
 
-Exit codes are 0 for valid corpus validation or all **32 with-skill** observations
+Exit codes are 0 for valid corpus validation or all **33 with-skill** observations
 passing with no incompatible baseline, 1 for invalid inputs or a with-skill failure,
 and 2 for incomplete with-skill evidence or an incompatible supplied baseline.
 Check the report `kind`: validation success is not a

@@ -154,7 +154,7 @@ Update the installed skills or plugin through your client’s update flow. Updat
 
 ## Evaluate the skills
 
-The [offline evaluation harness](evals/README.md) includes 32 synthetic scenarios for the four skills. Validate the cases locally or grade saved agent traces with explicit human review. The harness makes no model calls; synthetic fixtures and missing runs do not count as behavior passes.
+The [offline evaluation harness](evals/README.md) includes 33 synthetic scenarios for the four skills. Validate the cases locally or grade saved agent traces with explicit human review. The harness makes no model calls; synthetic fixtures and missing runs do not count as behavior passes.
 
 ## License and help
 

@@ -14,6 +14,9 @@ For a value-based analysis, use comparable valuations in one base currency,
 with the valuation and foreign-exchange dates stated. A supplied weight-based
 analysis can use those weights if their scope and denominator are known.
 Account or holding weights from different denominators cannot simply be added.
+Use one input basis for the entire calculation. A percentage cannot fill a
+missing monetary valuation. When only percentages are supplied, describe the
+amounts as notional and report their supplied total before interpreting shares.
 
 Keeping cash outside fund look-through is a decomposition choice, not a new
 denominator. For a hypothetical portfolio with 40% cash, a company exposure of
@@ -45,7 +48,8 @@ For a long-only fund with disclosed constituent weights, the portfolio weight
 of an underlying position is the fund's portfolio weight multiplied by the
 position's weight inside the fund. Use fractions consistently in calculations.
 Add the investor's direct exposure to that security and the contributions from
-other funds. For example, a hypothetical 20% portfolio holding in a fund whose
+other funds. Keep each distinct fund's unresolved amount separate, including
+funds that share a ticker and have distinct ISINs. For example, a hypothetical 20% portfolio holding in a fund whose
 constituent is 5% contributes 1% portfolio exposure to that constituent.
 
 Count multiple lots of the same fund once when comparing funds, while adding
@@ -80,8 +84,29 @@ fund provenance describe parts of a row already included in its weight.
 
 For two distinct long-only funds with constituent weights on compatible bases,
 weighted holdings overlap is `sum(min(weight_A, weight_B))` over shared security
-identities. Sum duplicate constituent lines before taking each minimum. This
+identities. Sum duplicate lines for each security in each fund before taking the minimum.
+The public Investboard engine proportionally scales a long-only fund's list if
+its weights total more than 100%. Apply those same effective weights to its
+positions, classification coverage and fund overlap. Leave a list below 100%
+at its reported weights. If a supplied file has an unexplained total above
+100%, establish whether it represents leverage or a data error before applying
+this long-only convention. This
 measures shared fund weight, not the investor's total duplicated exposure.
+
+For example, suppose two long-only funds are worth EUR 100 each. A reports
+75% Alpha and 75% Beta. B reports 80% Alpha and leaves its remainder
+undisclosed. Under the public engine's scaling convention A contributes
+EUR 50 to each company. Across both funds there is EUR 130 Alpha, EUR 50
+Beta and EUR 20 unresolved. The two funds overlap by 50%. If Alpha and Beta
+are distinct issuers and all exposure is equity, the 90% attribution gives an
+HHI lower bound of 0.485 and an effective issuer upper bound of 2.06186.
+
+For a connected report, compare the reported overlap with the sum of matched
+effective weights when those weights are available. If they disagree, report
+both readings with their bases and flag the discrepancy. A shared-ticker
+remainder row can represent more than one fund. Use its per-fund provenance
+to attribute amounts, and mark anything the response does not distinguish as
+unresolved.
 
 The overlap coefficient is not the share of an equal-weight blend invested in
 common names. For example, if fictional fund A has X=30%, Y=20%, Z=50% and fund B
@@ -124,7 +149,11 @@ report a measured 50% issuer exposure when present and leave both HHI and
 effective issuer count unavailable. Starting at 80% coverage, follow
 `metricBounds`: with one identified issuer at 80% and the rest unresolved,
 HHI is at least 0.64 and effective count is at most 1.5625. Exact values require
-full attribution. The descriptive analysis does not establish an investor cap
+full attribution. Use the unrounded coverage for the threshold. When presenting
+fewer digits, round a lower bound downward and an upper bound upward. In a
+supplied-file analysis, use the supplied issuer identity across listings while
+keeping the distinct securities and their direct and fund exposures visible.
+The descriptive analysis does not establish an investor cap
 or a mandate breach.
 
 ## Historical correlations
@@ -157,7 +186,9 @@ If `get_portfolio_correlations` returns `partial` with
 coefficient and common weeks. Preserve price-return exceptions in
 `priceBasisIsins` and their omitted count. Portfolio-weighted mean correlation,
 weighted coverage and largest-group share remain unknown when their fields
-are null. A near-zero pair coefficient describes that pair's linear association.
+are null. An interval reported for a measured pair should contain its coefficient.
+Flag an inconsistent interval and quote the observed coefficient separately.
+A near-zero pair coefficient describes that pair's linear association.
 
 ## Dividend timing
 
@@ -167,7 +198,8 @@ include a dividend on the closing date and exclude it on the opening date.
 For a single EUR 10 dividend at the shared boundary, recorded income is EUR 10
 in the first window, zero in the second and EUR 10 across both. Keep any
 missing currency conversion or unvalued interval visible when explaining
-income, price and FX. Preserve withheld components and the bridge residual.
+income, price and FX. Assign any recorded dividend tax on that same close to
+the window ending there. Preserve unknown tax amounts and the bridge residual.
 
 ## Sources
 
